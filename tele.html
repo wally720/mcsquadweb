@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Teleprompter by MCSquad</title>
+  <style>
+    :root{
+      --bg1:#0f0f15;
+      --bg2:#141b2d;
+      --accent:#00e0ff;
+      --accent2:#9d4edd;
+      --danger:#ff3b3b;
+      --ok:#00d38f;
+      --text:#e6eef8;
+      --muted:#9aa3ad;
+      --card:#0b0f1aee;
+      --glass: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.12);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji','Segoe UI Emoji', 'Segoe UI Symbol';
+      color:var(--text);
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(0,224,255,.08), transparent 60%),
+                  radial-gradient(1000px 700px at 90% 30%, rgba(157,78,221,.10), transparent 60%),
+                  linear-gradient(160deg,var(--bg1),var(--bg2));
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    header{
+      position:sticky; top:0; z-index:10;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items:center;
+      gap:12px;
+      padding:10px 16px;
+      border-bottom:1px solid var(--border);
+      background: linear-gradient( to bottom, rgba(10,12,20,.9), rgba(10,12,20,.65));
+      backdrop-filter: blur(8px);
+    }
+    #brand{
+      display:flex; align-items:center; gap:12px;
+    }
+    #brand img{
+      height:64px; width:auto; object-fit:contain; filter: drop-shadow(0 0 8px rgba(0,224,255,.35));
+    }
+    #title{
+      justify-self:center;
+      font-weight:800; letter-spacing:.3px;
+      font-size: clamp(18px, 3.3vw, 28px);
+      text-align:center;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip:text; background-clip:text;
+      color:transparent;
+      text-shadow: 0 0 18px rgba(0,224,255,.35);
+    }
+    #actions{justify-self:end; display:flex; gap:8px; align-items:center;}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:6px;
+      padding:10px 14px; border-radius:10px;
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      color:var(--text); text-decoration:none; font-weight:600; font-size:14px; cursor:pointer;
+      transition: transform .12s ease, box-shadow .12s ease, background .2s ease;
+      touch-action: manipulation;
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.25);}
+    .btn-primary{ background: linear-gradient(180deg, rgba(0,224,255,.22), rgba(0,224,255,.10)); border-color: rgba(0,224,255,.45); }
+    .btn-danger{ background: linear-gradient(180deg, rgba(255,59,59,.22), rgba(255,59,59,.10)); border-color: rgba(255,59,59,.45); }
+    .btn-ok{ background: linear-gradient(180deg, rgba(0,211,143,.22), rgba(0,211,143,.10)); border-color: rgba(0,211,143,.45); }
+    .pill{ padding:8px 12px; font-size:13px; border-radius:999px; }
+    main{ display:flex; flex:1; min-height:0; }
+    #editor{
+      width: 40%;
+      min-width: 290px;
+      max-width: 640px;
+      padding:14px;
+      border-right:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+      display:flex; flex-direction:column; gap:10px;
+    }
+    #inputText{
+      flex:1; min-height:160px; max-height:45vh;
+      width:100%; padding:14px 12px;
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius:12px; color:#c8f7c5;
+      font-size:16px; line-height:1.5; resize:vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+    }
+    #controlBar{
+      display:grid; grid-template-columns: 1fr 1fr; gap:10px;
+    }
+    .card{
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius:14px; padding:10px;
+    }
+    .control{
+      display:flex; align-items:center; gap:10px; justify-content:space-between;
+      padding:8px 10px;
+    }
+    input[type=range]{ width: 100%; }
+    label{ font-size:13px; color:var(--muted); }
+    #viewer{
+      flex:1; position:relative; overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+      padding:10px;
+    }
+    #viewerInner{
+      position:relative; width: min(100%, 1200px); height: 100%;
+      border:1px solid var(--border); border-radius:16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      backdrop-filter: blur(4px);
+      box-shadow: inset 0 0 40px rgba(0,224,255,.06), 0 10px 30px rgba(0,0,0,.35);
+      overflow:hidden;
+    }
+    #teleprompter{
+      position:absolute; left:50%; transform: translateX(-50%) scaleY(var(--mirror, 1));
+      width: 86%; max-width: 1000px;
+      white-space: pre-wrap; text-align:center;
+      font-size: clamp(24px, 4.2vw, 60px);
+      line-height: 1.5;
+      top: 100%;
+      color: #f2f7ff;
+      text-shadow: 0 0 10px rgba(0,224,255,.08);
+    }
+    #reference-line{
+      position:absolute; top:50%; left:0; right:0; height:2px;
+      background: linear-gradient(90deg, transparent, var(--danger), transparent);
+      opacity:.55; pointer-events:none;
+    }
+    .hidden{ display:none !important; }
+    @media (max-width: 980px){
+      main{ flex-direction: column; }
+      #editor{ width:100%; max-width:none; border-right:none; border-bottom:1px solid var(--border); }
+      #inputText{ max-height: 240px; }
+      #viewerInner{ height: 60vh; }
+    }
+    @media (min-width: 981px){
+      #viewerInner{ height: calc(100vh - 112px); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div id="brand">
+      <img src="https://lavelada.mcsquad.net/logomcsquad.png" alt="Logo MCSquad">
+    </div>
+    <div id="title">Teleprompter by MCSquad</div>
+    <div id="actions">
+      <a class="btn btn-primary pill" href="https://discord.com/invite/8uvAN9CTH9" target="_blank" rel="noopener">💬 Discord</a>
+    </div>
+  </header>
+
+  <main>
+    <section id="editor">
+      <textarea id="inputText" placeholder="Escribe o pega aquí tu guion…&#10;Sugerencia: usa párrafos breves y saltos de línea para respirar."></textarea>
+
+      <div id="controlBar">
+        <div class="card">
+          <div class="control">
+            <label for="speed">Velocidad</label>
+            <input type="range" id="speed" min="0.1" max="3" value="0.6" step="0.1">
+          </div>
+          <div class="control">
+            <label for="fontSize">Tamaño de texto</label>
+            <input type="range" id="fontSize" min="20" max="120" value="48" step="2">
+          </div>
+          <div class="control" style="justify-content:flex-start; gap:12px; flex-wrap:wrap;">
+            <button class="btn btn-ok" id="playBtn">▶ Iniciar</button>
+            <button class="btn" id="pauseBtn">⏸ Pausar</button>
+            <button class="btn btn-danger" id="resetBtn">⏮ Reiniciar</button>
+            <button class="btn" id="fullscreenBtn">⛶ Pantalla completa</button>
+            <button class="btn" id="mirrorBtn">🪞 Espejo</button>
+            <label class="btn pill" style="cursor:pointer;">
+              <input type="checkbox" id="toggleLine" checked style="accent-color:var(--danger); width:16px; height:16px; margin-right:6px;"> Línea guía
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="viewer">
+      <div id="viewerInner">
+        <div id="teleprompter"></div>
+        <div id="reference-line"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const inputText = document.getElementById("inputText");
+    const teleprompter = document.getElementById("teleprompter");
+    const speed = document.getElementById("speed");
+    const fontSize = document.getElementById("fontSize");
+    const refLine = document.getElementById("reference-line");
+    const playBtn = document.getElementById("playBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    const mirrorBtn = document.getElementById("mirrorBtn");
+    const toggleLine = document.getElementById("toggleLine");
+    const viewerInner = document.getElementById("viewerInner");
+
+    let rafId = null;
+    let pos = 0;
+    let running = false;
+
+    function init(){
+      updateTeleprompter();
+      teleprompter.style.fontSize = fontSize.value + "px";
+      refLine.classList.toggle("hidden", !toggleLine.checked);
+      resetPosition();
+    }
+
+    function updateTeleprompter(){
+      teleprompter.textContent = inputText.value || "Pega tu guion aquí…\\n\\nConsejo: usa pausas con líneas en blanco y ajusta la velocidad para tu ritmo de lectura.";
+      resetPosition();
+    }
+
+    function resetPosition(){
+      pos = viewerInner.clientHeight + 12;
+      teleprompter.style.top = pos + "px";
+    }
+
+    function step(){
+      pos -= parseFloat(speed.value);
+      teleprompter.style.top = pos + "px";
+      if(pos + teleprompter.scrollHeight > 0 && running){
+        rafId = requestAnimationFrame(step);
+      }else{
+        running = false;
+      }
+    }
+
+    playBtn.addEventListener("click", ()=>{
+      if(running) return;
+      running = true;
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(step);
+    });
+    pauseBtn.addEventListener("click", ()=>{ running = false; cancelAnimationFrame(rafId); });
+    resetBtn.addEventListener("click", ()=>{
+      running = false;
+      cancelAnimationFrame(rafId);
+      resetPosition();
+      running = true;
+      rafId = requestAnimationFrame(step);
+    });
+    inputText.addEventListener("input", updateTeleprompter);
+    fontSize.addEventListener("input", ()=>{ teleprompter.style.fontSize = fontSize.value + "px"; });
+    toggleLine.addEventListener("change", ()=>{ refLine.classList.toggle("hidden", !toggleLine.checked); });
+
+    fullscreenBtn.addEventListener("click", ()=>{
+      const el = document.documentElement;
+      if(!document.fullscreenElement){
+        el.requestFullscreen?.();
+      }else{
+        document.exitFullscreen?.();
+      }
+    });
+
+    mirrorBtn.addEventListener("click", ()=>{
+      const mirrored = getComputedStyle(teleprompter).getPropertyValue("--mirror").trim();
+      const v = (mirrored && mirrored !== "1") ? 1 : -1;
+      teleprompter.style.setProperty("--mirror", v);
+    });
+
+    document.addEventListener("keydown", (e)=>{
+      if(e.target === inputText) return;
+      if(e.code === "Space"){ e.preventDefault(); running ? pauseBtn.click() : playBtn.click(); }
+      if(e.key === "ArrowUp"){ e.preventDefault(); speed.value = Math.min(parseFloat(speed.max), parseFloat(speed.value)+0.1); }
+      if(e.key === "ArrowDown"){ e.preventDefault(); speed.value = Math.max(parseFloat(speed.min), parseFloat(speed.value)-0.1); }
+      if(e.key === "+"){ fontSize.value = Math.min(parseInt(fontSize.max), parseInt(fontSize.value)+2); fontSize.dispatchEvent(new Event("input")); }
+      if(e.key === "-"){ fontSize.value = Math.max(parseInt(fontSize.min), parseInt(fontSize.value)-2); fontSize.dispatchEvent(new Event("input")); }
+      if(e.key?.toLowerCase() === "f"){ fullscreenBtn.click(); }
+      if(e.key?.toLowerCase() === "m"){ mirrorBtn.click(); }
+      if(e.key?.toLowerCase() === "l"){ toggleLine.checked = !toggleLine.checked; toggleLine.dispatchEvent(new Event("change")); }
+    });
+
+    window.addEventListener("resize", ()=>{ resetPosition(); });
+
+    init();
+  </script>
+</body>
+</html>
