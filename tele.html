@@ -64,13 +64,13 @@
     /* Panel lateral (redimensionable con splitter) */
     #editor{
       flex: 0 0 auto;
-      width: 30%;
-      min-width: 200px;
-      max-width: 40%;
+      width: 30%;             /* por defecto */
+      min-width: 200px;       /* mínimo absoluto */
+      max-width: 40%;         /* máximo relativo */
       padding:14px;
       border-right:1px solid var(--border);
       background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
-      display:flex; flex-direction:column; gap:10px;
+      display:flex; flex-direction:column; gap:14px;
       overflow:auto;
     }
 
@@ -80,8 +80,7 @@
       background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
       border-right:1px solid var(--border);
       position:relative;
-      user-select:none;
-      touch-action:none;
+      user-select:none; touch-action:none;
     }
     #splitter::after{
       content:""; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
@@ -98,13 +97,14 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
     }
 
-    #controlBar{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-    .card{ background: var(--card); border:1px solid var(--border); border-radius:14px; padding:10px; }
-    .control{ display:flex; align-items:center; gap:10px; justify-content:space-between; padding:8px 10px; }
+    /* Contenedor de controles ocupa todo el ancho del editor */
+    #controlBar{ display:block; width:100%; }
+    .card{ background: var(--card); border:1px solid var(--border); border-radius:14px; padding:14px; width:100%; }
+    .control{ display:flex; align-items:center; gap:10px; justify-content:space-between; padding:8px 10px; flex-wrap:wrap; }
     input[type=range]{ width: 100%; }
-    label{ font-size:13px; color:var(--muted); }
+    label{ font-size:13px; color:#9aa3ad; }
 
-    /* Botones de acción (compactos) */
+    /* Botones (compactos) */
     .btn{ padding:6px 12px; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:all .2s ease; }
     .btn-ok{background:linear-gradient(135deg,var(--ok),#00b37a);color:#fff;}
     .btn-danger{background:linear-gradient(135deg,var(--danger),#c93030);color:#fff;}
@@ -132,7 +132,6 @@
 <body>
   <header>
     <div id="brand">
-      <!-- MISMA VENTANA -->
       <a href="https://mcsquad.net/" title="Ir al inicio MCSquad">
         <img src="https://mcsquad.net/logomcsquad.png" alt="Logo MCSquad">
       </a>
@@ -299,7 +298,7 @@
       if(!dragging) return;
       dragging = false;
       document.body.style.userSelect = '';
-      try{ splitter.releasePointerCapture(e.pointerId); }catch(_){}
+      try{ splitter.releasePointerCapture(e.pointerId); }catch(_){/* no-op */}
     }
     window.addEventListener('pointerup', endDrag);
     window.addEventListener('pointercancel', endDrag);
