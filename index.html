@@ -3,13 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gracias por votar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=1">
+  <title>MCSquad - Una comunidad de gamers amables</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji','Segoe UI Emoji', 'Segoe UI Symbol';
       overflow: hidden;
       background: #000;
       color: #fff;
@@ -38,25 +42,28 @@
       font-size: 3rem;
       color: #fff;
       text-shadow: 0 0 20px #00ffff;
-      border-right: 3px solid #fff;
+      border-right: 3px solid #fff; /* cursor */
       white-space: nowrap;
+      display: inline-block;
       overflow: hidden;
-      width: 0;
-      animation: typing 2.5s steps(30, end) forwards, blink 0.75s step-end infinite;
+      /* cantidad de "caracteres" a mostrar (ajustable) */
+      --chars: 23;
+      width: 0ch;
+      animation: typing 2.5s steps(23, end) forwards, blink 0.75s step-end infinite;
     }
 
     @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
+      from { width: 0ch }
+      to { width: calc(var(--chars) * 1ch) }
     }
 
     @keyframes blink {
       50% { border-color: transparent }
     }
 
-    img {
+    .content img {
       max-width: 250px;
-      margin: 40px 0;
+      margin: 44px 0;
       animation: fadeIn 2s ease-in-out forwards;
       opacity: 0;
     }
@@ -65,32 +72,59 @@
       to { opacity: 1; transform: scale(1.05); }
     }
 
+    .buttons { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+
     a.button {
-      display: inline-block;
-      padding: 15px 25px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px;
       background: linear-gradient(90deg, #06b6d4, #3b82f6);
-      color: white;
+      color: #fff;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 700;
       border-radius: 50px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 0 10px #06b6d4;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.45);
     }
 
-    a.button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 20px #3b82f6;
-    }
+    a.button:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 0 20px rgba(59,130,246,.65); }
   </style>
 </head>
 <body>
+
+  <header class="compact">
+    <div id="brand">
+      <a href="https://mcsquad.net/" title="Ir al inicio MCSquad">
+        <img src="logomcsquad.png" alt="Logo MCSquad">
+      </a>
+    </div>
+    <div id="title">MCSquad</div>
+    <div id="actions">
+      <div class="buttons">
+        <a href="https://discord.com/invite/8uvAN9CTH9" class="button button-discord" target="_blank" rel="noopener" aria-label="Unirse a Discord">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M20.317 4.369a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.249a18.27 18.27 0 00-5.478 0 12.3 12.3 0 00-.617-1.249.077.077 0 00-.079-.037 19.736 19.736 0 00-4.885 1.515.07.07 0 00-.032.027C1.83 9.063.944 13.63 1.335 18.144a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.08.08 0 00.086-.028c.462-.63.874-1.295 1.226-1.994a.078.078 0 00-.043-.108 13.107 13.107 0 01-1.872-.893.08.08 0 01-.008-.134c.126-.094.252-.192.372-.291a.074.074 0 01.077-.01c3.928 1.792 8.18 1.792 12.062 0a.074.074 0 01.078.01c.12.099.245.197.372.291a.08.08 0 01-.007.134c-.6.35-1.227.646-1.873.893a.078.078 0 00-.042.109c.36.698.772 1.363 1.225 1.993a.08.08 0 00.086.029 19.86 19.86 0 005.993-3.03.08.08 0 00.03-.057c.5-5.177-.838-9.71-3.548-13.748a.067.067 0 00-.031-.027zM9.681 15.347c-1.183 0-2.157-1.09-2.157-2.426 0-1.336.956-2.426 2.157-2.426 1.21 0 2.175 1.1 2.157 2.426 0 1.336-.956 2.426-2.157 2.426zm4.64 0c-1.183 0-2.157-1.09-2.157-2.426 0-1.336.955-2.426 2.157-2.426 1.21 0 2.176 1.1 2.157 2.426 0 1.336-.946 2.426-2.157 2.426z"/></svg>
+          <span>Discord</span>
+        </a>
+        <a href="tele.html" class="button button-tele">Teleprompter</a>
+      </div>
+    </div>
+  </header>
 
   <div id="particles-js"></div>
 
   <div class="content">
     <h1>¡Gracias por visitarnos!</h1>
-    <img src="/logomcsquad.png" alt="Logo">
-    <a href="https://discord.com/invite/rGk6Q2dsDN" class="button" target="_blank">Unirse al Discord</a>
+    <img src="logomcsquad.png" alt="Logo">
+    <div class="buttons">
+      <a href="https://discord.com/invite/8uvAN9CTH9" class="button button-discord" target="_blank" rel="noopener"> 
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
+          <path d="M20.317 4.369a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.249a18.27 18.27 0 00-5.478 0 12.3 12.3 0 00-.617-1.249.077.077 0 00-.079-.037 19.736 19.736 0 00-4.885 1.515.07.07 0 00-.032.027C1.83 9.063.944 13.63 1.335 18.144a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.08.08 0 00.086-.028c.462-.63.874-1.295 1.226-1.994a.078.078 0 00-.043-.108 13.107 13.107 0 01-1.872-.893.08.08 0 01-.008-.134c.126-.094.252-.192.372-.291a.074.074 0 01.077-.01c3.928 1.792 8.18 1.792 12.062 0a.074.074 0 01.078.01c.12.099.245.197.372.291a.08.08 0 01-.007.134c-.6.35-1.227.646-1.873.893a.078.078 0 00-.042.109c.36.698.772 1.363 1.225 1.993a.08.08 0 00.086.029 19.86 19.86 0 005.993-3.03.08.08 0 00.03-.057c.5-5.177-.838-9.71-3.548-13.748a.067.067 0 00-.031-.027zM9.681 15.347c-1.183 0-2.157-1.09-2.157-2.426 0-1.336.956-2.426 2.157-2.426 1.21 0 2.175 1.1 2.157 2.426 0 1.336-.956 2.426-2.157 2.426zm4.64 0c-1.183 0-2.157-1.09-2.157-2.426 0-1.336.955-2.426 2.157-2.426 1.21 0 2.176 1.1 2.157 2.426 0 1.336-.946 2.426-2.157 2.426z"/>
+        </svg>
+        <span>Unirse a Discord</span>
+      </a> 
+      <a href="tele.html" class="button button-tele">Teleprompter</a> 
+    </div>
   </div>
 
   <!-- Particles.js CDN -->
