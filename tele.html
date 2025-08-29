@@ -16,6 +16,15 @@
       --muted:#9aa3ad;
       --card:#0b0f1aee;
       --border: rgba(255,255,255,0.12);
+      /* Tamaños del header (sincronizados con styles.css) */
+      --header-h:72px;
+      --header-pad-y:6px;
+      --header-pad-x:20px;
+      --header-gap:8px;
+      --logo-h:72px;
+      --logo-offset-y: -8px;
+      --title-min:22px;
+      --title-max:44px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -35,20 +44,21 @@
       display:grid;
       grid-template-columns: 1fr auto 1fr;
       align-items:center;
-      gap:12px;
-      padding:20px 64px;
+      gap:var(--header-gap);
+      padding:var(--header-pad-y) var(--header-pad-x);
+      height:var(--header-h);
       border-bottom:1px solid var(--border);
-      background: linear-gradient( to bottom, rgba(10,12,20,.9), rgba(10,12,20,.65));
-      backdrop-filter: blur(8px);
+      background: linear-gradient(to bottom, rgba(10,12,20,.45), rgba(10,12,20,.25));
+      backdrop-filter: blur(6px);
     }
-    #brand{ display:flex; align-items:center; gap:12px; }
+    #brand{ display:flex; align-items:center; gap:12px; transform: translateY(var(--logo-offset-y)); }
     #brand a{ display:inline-flex; }
-    #brand img{ height:72px; width:auto; object-fit:contain; filter: drop-shadow(0 0 8px rgba(0,224,255,.35)); }
+    #brand img{ height:var(--logo-h); width:auto; object-fit:contain; filter: drop-shadow(0 0 8px rgba(0,224,255,.35)); }
 
     #title{
       justify-self:center;
       font-weight:800; letter-spacing:.3px;
-      font-size: clamp(28px, 4vw, 56px);
+      font-size: clamp(var(--title-min), 3vw, var(--title-max));
       text-align:center;
       background: linear-gradient(90deg, var(--accent), var(--accent2));
       -webkit-background-clip:text; background-clip:text;
@@ -58,6 +68,15 @@
     #actions{justify-self:end; display:flex; gap:8px; align-items:center;}
     #actions a img{ height:44px; width:auto; }
     #actions a img:hover{ filter: drop-shadow(0 0 6px rgba(88,101,242,.7)); }
+
+    /* Botones reutilizables (mismo estilo que index) */
+    .buttons{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    a.button{ display:inline-flex; align-items:center; gap:10px; padding:10px 16px; background:linear-gradient(90deg,#06b6d4,#3b82f6); color:#fff; text-decoration:none; font-weight:700; border-radius:999px; transition:transform .2s ease, box-shadow .2s ease; box-shadow:0 0 10px rgba(59,130,246,.35); }
+    a.button:hover{ transform:translateY(-2px); box-shadow:0 0 18px rgba(59,130,246,.55); }
+    a.button:focus-visible{ outline:3px solid rgba(59,130,246,.6); outline-offset:2px; }
+    a.button svg{ width:18px; height:18px; display:block; }
+    .button-discord{ background:linear-gradient(90deg,#5865F2,#4752C4); box-shadow:0 0 12px rgba(88,101,242,.5); }
+    .button-tele{ background:linear-gradient(90deg,#06b6d4,#3b82f6); }
 
     main{ display:flex; flex:1; min-height:0; }
 
@@ -140,7 +159,7 @@
       header{ padding:12px 16px; }
       #brand img{ height:48px; }
       #title{ font-size: clamp(20px, 6vw, 34px); }
-      #actions a img{ height:32px; }
+    #actions a img{ height:32px; }
 
       main{ flex-direction: column; }
       #splitter{ display:none; }
@@ -172,9 +191,15 @@
     </div>
     <div id="title">Teleprompter by MCSquad</div>
     <div id="actions">
-      <a href="https://discord.com/invite/8uvAN9CTH9" target="_blank" rel="noopener" title="Únete a Discord">
-        <img src="https://cdn.worldvectorlogo.com/logos/discord-6.svg" alt="Discord">
-      </a>
+      <div class="buttons">
+        <a href="https://discord.com/invite/8uvAN9CTH9" class="button button-discord" target="_blank" rel="noopener" title="Únete a Discord">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
+            <path d="M20.317 4.369a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.249a18.27 18.27 0 00-5.478 0 12.3 12.3 0 00-.617-1.249.077.077 0 00-.079-.037 19.736 19.736 0 00-4.885 1.515.07.07 0 00-.032.027C1.83 9.063.944 13.63 1.335 18.144a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.08.08 0 00.086-.028c.462-.63.874-1.295 1.226-1.994a.078.078 0 00-.043-.108 13.107 13.107 0 01-1.872-.893.08.08 0 01-.008-.134c.126-.094.252-.192.372-.291a.074.074 0 01.077-.01c3.928 1.792 8.18 1.792 12.062 0a.074.074 0 01.078.01c.12.099.245.197.372.291a.08.08 0 01-.007.134c-.6.35-1.227.646-1.873.893a.078.078 0 00-.042.109c.36.698.772 1.363 1.225 1.993a.08.08 0 00.086.029 19.86 19.86 0 005.993-3.03.08.08 0 00.03-.057c.5-5.177-.838-9.71-3.548-13.748a.067.067 0 00-.031-.027zM9.681 15.347c-1.183 0-2.157-1.09-2.157-2.426 0-1.336.956-2.426 2.157-2.426 1.21 0 2.175 1.1 2.157 2.426 0 1.336-.956 2.426-2.157 2.426zm4.64 0c-1.183 0-2.157-1.09-2.157-2.426 0-1.336.955-2.426 2.157-2.426 1.21 0 2.176 1.1 2.157 2.426 0 1.336-.946 2.426-2.157 2.426z"/>
+          </svg>
+          <span>Discord</span>
+        </a>
+        <a href="tele.html" class="button button-tele">Teleprompter</a> 
+      </div>
     </div>
   </header>
 
@@ -210,7 +235,7 @@
 
     <section id="viewer">
       <div id="viewerInner">
-        <div id="teleprompter"></div>
+        <div id="teleprompter" aria-live="polite"></div> 
         <div id="reference-line"></div>
       </div>
     </section>
@@ -336,7 +361,6 @@
     }
     window.addEventListener('pointerup', endDrag);
     window.addEventListener('pointercancel', endDrag);
-
     window.addEventListener("resize", ()=>{ resetPosition(); });
 
     init();
