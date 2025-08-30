@@ -39,7 +39,7 @@ body{
 
 /* Layout principal */
 main{padding-top:var(--header-h)}
-.section{min-height:100vh; display:flex; align-items:center; background-position:center; background-size:cover; background-repeat:no-repeat}
+.section{min-height:100vh; display:flex; align-items:center; background-position: center, center; background-size: auto, cover; background-repeat: no-repeat, no-repeat}
 .container{width:min(var(--container), calc(100% - 2*var(--pad-x))); margin-inline:auto}
 .section h2{font-size:clamp(28px,5vw,48px); margin:0 0 12px}
 .section p{font-size:clamp(16px,2.2vw,18px); opacity:.95}
@@ -113,43 +113,43 @@ section{scroll-margin-top: calc(var(--header-h) + 16px)}
 /* Fondos por sección (imágenes en ../img) */
 #que-somos{
   background-image:
-    linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
+    linear-gradient(rgba(0,0,0,.025), rgba(0,0,0,.055)),
     url('../img/fondo-que.jpg');
   color:#fff;
 }
 
 #quienes-somos{
   background-image:
-    linear-gradient(rgba(255,255,255,.18), rgba(255,255,255,.18)),
+    linear-gradient(rgba(255,255,255,.018), rgba(255,255,255,.018)),
     url('../img/fondo-quienes.jpg');
 }
 
 #herramientas{
   background-image:
-    linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
+    linear-gradient(rgba(0,0,0,.045), rgba(0,0,0,.045)),
     url('../img/fondo-herramientas.jpg');
 }
 
 #proyectos{
   background-image:
-    linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
+    linear-gradient(rgba(0,0,0,.045), rgba(0,0,0,.045)),
     url('../img/fondo-proyectos.jpg');
 }
 
 #galeria{
   background-image:
-    linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
+    linear-gradient(rgba(0,0,0,.035), rgba(0,0,0,.035)),
     url('../img/fondo-galeria.jpg');
 }
 
 #redes{
   background-image:
-    linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
+    linear-gradient(rgba(0,0,0,.045), rgba(0,0,0,.045)),
     url('../img/fondo-redes.jpg');
 }
 
 #experiencias{
   background-image:
-    linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)),
+    linear-gradient(rgba(0,0,0,.05), rgba(0,0,0,.05)),
     url('../img/fondo-experiencias.jpg');
 }
