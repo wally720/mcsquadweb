@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Trading Cripto Avanzada</title>
+    <title>Calculadora de Trading Cripto - Suite Completa</title>
     <style>
         * {
             margin: 0;
@@ -47,10 +47,94 @@
             font-size: 14px;
         }
 
-        .content {
-            padding: 30px;
+        /* TABS */
+        .tabs-container {
+            display: flex;
+            background: #252538;
+            border-bottom: 2px solid #3d3d5c;
         }
 
+        .tab {
+            flex: 1;
+            padding: 18px 30px;
+            text-align: center;
+            cursor: pointer;
+            background: #252538;
+            color: #a1a1aa;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s;
+            border-right: 1px solid #3d3d5c;
+            position: relative;
+        }
+
+        .tab:last-child {
+            border-right: none;
+        }
+
+        .tab:hover {
+            background: #2d2d44;
+            color: #d4d4d8;
+        }
+
+        .tab.active {
+            background: #1e1e2e;
+            color: #a78bfa;
+            border-bottom: 3px solid #6366f1;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* FAB para calculadora clásica flotante */
+        .fab-calculator {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5);
+            transition: all 0.3s;
+            z-index: 999;
+            border: none;
+            color: white;
+            font-size: 24px;
+        }
+
+        .fab-calculator:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(245, 158, 11, 0.7);
+        }
+
+        /* FAB Historial */
         .fab-history {
             position: fixed;
             bottom: 30px;
@@ -92,6 +176,204 @@
             font-weight: 700;
         }
 
+        /* Modal flotante para calculadora clásica */
+        .floating-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #2d3748;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+            z-index: 2500;
+            display: none;
+            border: 2px solid #f59e0b;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .floating-modal.show {
+            display: block;
+            animation: modalSlideIn 0.3s;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translate(-50%, -60%); opacity: 0; }
+            to { transform: translate(-50%, -50%); opacity: 1; }
+        }
+
+        .floating-modal-header {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 13px 13px 0 0;
+            cursor: move;
+        }
+
+        .floating-modal-header h3 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .btn-close-floating {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-close-floating:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .floating-modal-body {
+            padding: 30px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            display: none;
+        }
+
+        .modal-backdrop.show {
+            display: block;
+        }
+
+        /* CALCULADORA CLÁSICA STYLES */
+        .classic-calc-container {
+            background: #374151;
+            border-radius: 10px;
+            padding: 25px;
+        }
+
+        .classic-calc-container h2 {
+            color: #fbbf24;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .classic-input-group {
+            margin-bottom: 15px;
+        }
+
+        .classic-input-group label {
+            display: block;
+            color: #d1d5db;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .classic-input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #4b5563;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #1f2937;
+            color: #e5e7eb;
+        }
+
+        .classic-input-group input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+        }
+
+        .classic-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .classic-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.5);
+        }
+
+        .classic-results {
+            margin-top: 20px;
+            padding: 20px;
+            background: #1f2937;
+            border-radius: 8px;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .classic-result-item {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .classic-result-item strong {
+            color: #fbbf24;
+        }
+
+        .classic-result-value {
+            color: #e5e7eb;
+            font-weight: 600;
+        }
+
+        .classic-result-green {
+            color: #22c55e;
+        }
+
+        .classic-result-red {
+            color: #ef4444;
+        }
+
+        .classic-result-yellow {
+            color: #fbbf24;
+        }
+
+        /* Estilos de la calculadora avanzada (ya existentes) */
+        .content {
+            /* padding ya definido en tab-content */
+        }
+
+        .section {
+            background: #252538;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #3d3d5c;
+        }
+
+        .section h2 {
+            color: #a78bfa;
+            margin-bottom: 15px;
+            font-size: 20px;
+            border-bottom: 2px solid #6366f1;
+            padding-bottom: 10px;
+        }
+
         .history-modal {
             position: fixed;
             top: 0;
@@ -102,7 +384,7 @@
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 2000;
+            z-index: 3000;
             padding: 20px;
         }
 
@@ -160,22 +442,6 @@
             padding: 30px;
             overflow-y: auto;
             flex: 1;
-        }
-
-        .section {
-            background: #252538;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #3d3d5c;
-        }
-
-        .section h2 {
-            color: #a78bfa;
-            margin-bottom: 15px;
-            font-size: 20px;
-            border-bottom: 2px solid #6366f1;
-            padding-bottom: 10px;
         }
 
         .history-container {
@@ -422,45 +688,6 @@
             outline: none;
             border-color: #6366f1;
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-        }
-
-        .input-with-tooltip {
-            position: relative;
-        }
-
-        .input-tooltip {
-            visibility: hidden;
-            width: 280px;
-            background-color: rgba(30, 30, 46, 0.98);
-            color: #e4e4e7;
-            text-align: center;
-            border-radius: 8px;
-            padding: 10px;
-            position: absolute;
-            z-index: 1000;
-            bottom: 125%;
-            left: 0;
-            opacity: 0;
-            transition: opacity 0.3s, visibility 0.3s;
-            font-size: 12px;
-            line-height: 1.4;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            border: 1px solid #6366f1;
-        }
-
-        .input-tooltip::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 20px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #6366f1 transparent transparent transparent;
-        }
-
-        .input-with-tooltip:hover .input-tooltip {
-            visibility: visible;
-            opacity: 1;
         }
 
         .entries-container {
@@ -806,9 +1033,17 @@
                 grid-template-columns: 1fr;
             }
 
-            .fab-history {
+            .fab-history, .fab-calculator {
                 width: 56px;
                 height: 56px;
+            }
+
+            .fab-calculator {
+                bottom: 90px;
+                right: 20px;
+            }
+
+            .fab-history {
                 bottom: 20px;
                 right: 20px;
             }
@@ -836,11 +1071,23 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>📊 Calculadora de Trading Cripto Avanzada</h1>
-            <p>Gestiona tus posiciones apalancadas con múltiples entradas y análisis de riesgo completo</p>
+            <h1>📊 Suite de Calculadoras de Trading Cripto</h1>
+            <p>Herramientas avanzadas para gestionar tus posiciones apalancadas</p>
         </div>
 
-        <div class="content">
+        <!-- TABS -->
+        <div class="tabs-container">
+            <div class="tab active" onclick="switchTab('advanced')">
+                🚀 Calculadora Avanzada
+            </div>
+            <div class="tab" onclick="switchTab('classic')">
+                📐 Calculadora Clásica SL V3
+            </div>
+        </div>
+
+        <!-- TAB CONTENT: CALCULADORA AVANZADA -->
+        <div id="advanced-tab" class="tab-content active">
+
             <div class="section">
                 <h2>⚙️ Configuración General</h2>
                 <div class="input-group">
@@ -856,10 +1103,7 @@
                         Stop Loss (%)
                         <span class="label-tooltip">Distancia del precio de entrada</span>
                     </label>
-                    <div class="input-with-tooltip">
-                        <input type="number" id="stop-loss-percent" value="5" min="0" max="100" step="1">
-                        <span class="input-tooltip">Distancia del precio de entrada</span>
-                    </div>
+                    <input type="number" id="stop-loss-percent" value="5" min="0" max="100" step="1">
                 </div>
                 <div class="input-group">
                     <label>Dirección de Posición</label>
@@ -1008,13 +1252,135 @@
                 </div>
             </div>
         </div>
+
+        <!-- TAB CONTENT: CALCULADORA CLÁSICA -->
+        <div id="classic-tab" class="tab-content">
+            <div class="classic-calc-container">
+                <h2>Calculadora de Posiciones SL V3</h2>
+
+                <div class="classic-input-group">
+                    <label>SLB (de la cuenta):</label>
+                    <input type="number" id="classic-slb" value="2" step="0.1">
+                </div>
+
+                <div class="classic-input-group">
+                    <label>SLT (del gráfico):</label>
+                    <input type="number" id="classic-slt" value="12" step="0.1">
+                </div>
+
+                <div class="classic-input-group">
+                    <label>Cuenta:</label>
+                    <input type="number" id="classic-account" value="3500" step="0.01">
+                </div>
+
+                <div class="classic-input-group">
+                    <label>Palanca:</label>
+                    <input type="number" id="classic-leverage" value="5" step="1" min="1">
+                </div>
+
+                <div class="classic-input-group">
+                    <label>PrecioLote:</label>
+                    <input type="number" id="classic-price" value="6.617" step="0.001">
+                </div>
+
+                <button class="classic-btn" onclick="calculateClassic()">
+                    📊 Calcular
+                </button>
+
+                <div class="classic-results hidden" id="classic-results">
+                    <div class="classic-result-item">
+                        <strong>El Margin es:</strong> 
+                        <span class="classic-result-value classic-result-green" id="classic-margin">-</span>
+                    </div>
+                    <div class="classic-result-item">
+                        <strong>El margin apalancado es:</strong> 
+                        <span class="classic-result-value classic-result-green" id="classic-margin-apalancado">-</span>
+                    </div>
+                    <div class="classic-result-item">
+                        <strong>El SL de la cuenta es de:</strong> 
+                        <span class="classic-result-value classic-result-red" id="classic-sl-account">-</span>
+                    </div>
+                    <div class="classic-result-item">
+                        <strong>El tamaño de posición es:</strong> 
+                        <span class="classic-result-value classic-result-yellow" id="classic-position-size">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- FAB: Calculadora Clásica Flotante -->
+    <button class="fab-calculator" onclick="openFloatingCalc()" title="Abrir calculadora clásica flotante">
+        🧮
+    </button>
+
+    <!-- FAB: Historial -->
     <button class="fab-history" onclick="openHistoryModal()" id="fab-history">
         🕐
         <span class="fab-badge hidden" id="history-count">0</span>
     </button>
 
+    <!-- Modal Flotante: Calculadora Clásica -->
+    <div class="modal-backdrop" id="floating-backdrop" onclick="closeFloatingCalc()"></div>
+    <div class="floating-modal" id="floating-modal">
+        <div class="floating-modal-header" id="floating-header">
+            <h3>🧮 Calculadora SL Clásica</h3>
+            <button class="btn-close-floating" onclick="closeFloatingCalc()">✕</button>
+        </div>
+        <div class="floating-modal-body">
+            <div class="classic-calc-container" style="background: transparent; padding: 0;">
+                <div class="classic-input-group">
+                    <label>SLB (de la cuenta):</label>
+                    <input type="number" id="floating-slb" value="2" step="0.1">
+                </div>
+
+                <div class="classic-input-group">
+                    <label>SLT (del gráfico):</label>
+                    <input type="number" id="floating-slt" value="12" step="0.1">
+                </div>
+
+                <div class="classic-input-group">
+                    <label>Cuenta:</label>
+                    <input type="number" id="floating-account" value="3500" step="0.01">
+                </div>
+
+                <div class="classic-input-group">
+                    <label>Palanca:</label>
+                    <input type="number" id="floating-leverage" value="5" step="1" min="1">
+                </div>
+
+                <div class="classic-input-group">
+                    <label>PrecioLote:</label>
+                    <input type="number" id="floating-price" value="6.617" step="0.001">
+                </div>
+
+                <button class="classic-btn" onclick="calculateFloating()">
+                    📊 Calcular
+                </button>
+
+                <div class="classic-results hidden" id="floating-results">
+                    <div class="classic-result-item">
+                        <strong>El Margin es:</strong> 
+                        <span class="classic-result-value classic-result-green" id="floating-margin">-</span>
+                    </div>
+                    <div class="classic-result-item">
+                        <strong>El margin apalancado es:</strong> 
+                        <span class="classic-result-value classic-result-green" id="floating-margin-apalancado">-</span>
+                    </div>
+                    <div class="classic-result-item">
+                        <strong>El SL de la cuenta es de:</strong> 
+                        <span class="classic-result-value classic-result-red" id="floating-sl-account">-</span>
+                    </div>
+                    <div class="classic-result-item">
+                        <strong>El tamaño de posición es:</strong> 
+                        <span class="classic-result-value classic-result-yellow" id="floating-position-size">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Historial -->
     <div class="history-modal" id="history-modal" onclick="closeHistoryModal(event)">
         <div class="history-modal-content" onclick="event.stopPropagation()">
             <div class="history-modal-header">
@@ -1053,6 +1419,127 @@
     <div id="global-tooltip" class="tooltip-text"></div>
 
     <script>
+        // ===== SISTEMA DE TABS =====
+        function switchTab(tab) {
+            // Ocultar todos los tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+
+            // Mostrar el tab seleccionado
+            if (tab === 'advanced') {
+                document.querySelector('.tab:nth-child(1)').classList.add('active');
+                document.getElementById('advanced-tab').classList.add('active');
+            } else if (tab === 'classic') {
+                document.querySelector('.tab:nth-child(2)').classList.add('active');
+                document.getElementById('classic-tab').classList.add('active');
+            }
+        }
+
+        // ===== CALCULADORA CLÁSICA =====
+        function calculateClassic() {
+            const slb = parseFloat(document.getElementById('classic-slb').value);
+            const slt = parseFloat(document.getElementById('classic-slt').value);
+            const account = parseFloat(document.getElementById('classic-account').value);
+            const leverage = parseFloat(document.getElementById('classic-leverage').value);
+            const price = parseFloat(document.getElementById('classic-price').value);
+
+            // Cálculos correctos
+            const margin = (((slb / slt) * account) / leverage);
+            const marginApalancado = margin * leverage;
+            const slAccount = slb * account / 100;
+            const positionSize = marginApalancado / price;
+
+            // Mostrar resultados
+            document.getElementById('classic-margin').textContent = margin.toFixed(2);
+            document.getElementById('classic-margin-apalancado').textContent = marginApalancado.toFixed(2);
+            document.getElementById('classic-sl-account').textContent = slAccount.toFixed(2) + ' $';
+            document.getElementById('classic-position-size').textContent = positionSize.toFixed(8);
+
+            document.getElementById('classic-results').classList.remove('hidden');
+        }
+
+        function calculateFloating() {
+            const slb = parseFloat(document.getElementById('floating-slb').value);
+            const slt = parseFloat(document.getElementById('floating-slt').value);
+            const account = parseFloat(document.getElementById('floating-account').value);
+            const leverage = parseFloat(document.getElementById('floating-leverage').value);
+            const price = parseFloat(document.getElementById('floating-price').value);
+
+            // Cálculos correctos
+            const margin = (((slb / slt) * account) / leverage);
+            const marginApalancado = margin * leverage;
+            const slAccount = slb * account / 100;
+            const positionSize = marginApalancado / price;
+
+            // Mostrar resultados
+            document.getElementById('floating-margin').textContent = margin.toFixed(2);
+            document.getElementById('floating-margin-apalancado').textContent = marginApalancado.toFixed(2);
+            document.getElementById('floating-sl-account').textContent = slAccount.toFixed(2) + ' $';
+            document.getElementById('floating-position-size').textContent = positionSize.toFixed(8);
+
+            document.getElementById('floating-results').classList.remove('hidden');
+        }
+
+        // ===== MODAL FLOTANTE =====
+        function openFloatingCalc() {
+            document.getElementById('floating-modal').classList.add('show');
+            document.getElementById('floating-backdrop').classList.add('show');
+        }
+
+        function closeFloatingCalc() {
+            document.getElementById('floating-modal').classList.remove('show');
+            document.getElementById('floating-backdrop').classList.remove('show');
+        }
+
+        // Hacer draggable el modal flotante
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        const floatingModal = document.getElementById('floating-modal');
+        const floatingHeader = document.getElementById('floating-header');
+
+        floatingHeader.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+
+        function dragStart(e) {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+
+            if (e.target === floatingHeader || floatingHeader.contains(e.target)) {
+                isDragging = true;
+            }
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+
+                xOffset = currentX;
+                yOffset = currentY;
+
+                setTranslate(currentX, currentY, floatingModal);
+            }
+        }
+
+        function dragEnd(e) {
+            initialX = currentX;
+            initialY = currentY;
+            isDragging = false;
+        }
+
+        function setTranslate(xPos, yPos, el) {
+            el.style.transform = 'translate(' + (xPos - window.innerWidth/2 + el.offsetWidth/2) + 'px, ' + (yPos - window.innerHeight/2 + el.offsetHeight/2) + 'px)';
+        }
+
+        // ===== CALCULADORA AVANZADA =====
         let entryCount = 1;
         const tooltip = document.getElementById('global-tooltip');
         let firstEntryPrice = 0;
@@ -1061,6 +1548,11 @@
         let selectedForComparison = [];
         let lastCalculationHash = null;
         const MAX_HISTORY = 10;
+
+        // Convertir nombre de moneda a mayúsculas en tiempo real
+        document.getElementById('coin-name').addEventListener('input', function(e) {
+            this.value = this.value.toUpperCase();
+        });
 
         function generateCalculationHash(data) {
             return JSON.stringify({
@@ -1161,6 +1653,9 @@
 
         function loadCalculation(index) {
             const calc = calculationHistory[index];
+
+            // Cambiar a la pestaña avanzada
+            switchTab('advanced');
 
             document.getElementById('coin-name').value = calc.coinName || '';
             document.getElementById('leverage').value = calc.leverage;
@@ -1508,18 +2003,32 @@
             document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Convertir nombre de moneda a mayúsculas en tiempo real
-        document.getElementById('coin-name').addEventListener('input', function(e) {
-            this.value = this.value.toUpperCase();
-        });
-
         loadHistory();
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeHistoryModal();
+                closeFloatingCalc();
             }
         });
+                // ===== CÁLCULO AUTOMÁTICO PARA CALCULADORA CLÁSICA (TAB) =====
+        document.getElementById('classic-slb').addEventListener('input', calculateClassic);
+        document.getElementById('classic-slt').addEventListener('input', calculateClassic);
+        document.getElementById('classic-account').addEventListener('input', calculateClassic);
+        document.getElementById('classic-leverage').addEventListener('input', calculateClassic);
+        document.getElementById('classic-price').addEventListener('input', calculateClassic);
+
+        // ===== CÁLCULO AUTOMÁTICO PARA CALCULADORA FLOTANTE =====
+        document.getElementById('floating-slb').addEventListener('input', calculateFloating);
+        document.getElementById('floating-slt').addEventListener('input', calculateFloating);
+        document.getElementById('floating-account').addEventListener('input', calculateFloating);
+        document.getElementById('floating-leverage').addEventListener('input', calculateFloating);
+        document.getElementById('floating-price').addEventListener('input', calculateFloating);
+
+        // Calcular automáticamente al cargar
+        calculateClassic();
+        calculateFloating();
+
     </script>
 </body>
 </html>
