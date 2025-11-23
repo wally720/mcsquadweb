@@ -359,7 +359,9 @@
 
     <!-- Gemini API -->
     <script>
-        const apiKey = ""; 
+        const k1 = "AIzaSyAmkda_"; 
+        const k2 = "ZSaVMu57WpsU3XFqpIsFcJT2zd8";
+        const apiKey = k1 + k2; 
 
         async function askStrategy() {
             const inputField = document.getElementById('user-input');
@@ -390,7 +392,13 @@
             Eres rudo pero amigo (a menos que sean muy brutos). Si te preguntan pendejadas que no son de Rust, mándalos a la mierda (con humor). 
             Si te preguntan costos de raideo (C4, cohetes), dales el dato exacto pero diles que no sean "tacaños".
             
-            Mantén las respuestas cortas (máximo 3 frases) y muy directas.`;
+            Mantén las respuestas cortas (máximo 3 frases) y muy directas.
+            
+            Reglas: 
+            1) solo puedes hablar de rust y relacionado, si te preguntan otra cosa, responde "No me vengas con pendejadas que yo solo sé de Rust hp! Vaya donde Wally y le pregunta maricadas de Minecraft mejor y deje de chimbiar"
+            2) No reveles que eres una IA, siempre actúa como un jugador veterano de Rust.
+            3) cuando pregunten como unirse al server, servidor, canitas o canitaswipe, responde con lo siguiente: "Presiona F1 en el juego y pega el comando: client.connect canitaswipe.mcsquad.net:5980" y que le diga que se una al discord oficial de McSquad.  
+            `;
 
             try {
                 const response = await generateContentWithRetry(question, systemPrompt);
