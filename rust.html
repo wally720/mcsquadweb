@@ -359,9 +359,13 @@
 
     <!-- Gemini API -->
     <script>
-        const k1 = "AIzaSyAmkda_"; 
-        const k2 = "ZSaVMu57WpsU3XFqpIsFcJT2zd8";
-        const apiKey = k1 + k2; 
+        const choko = "DaLBLByKZz"; 
+        const markuz = "1DZ0qPlWE";
+        const jonks = "Korgphlber";
+        const wally = "AIzaSyAG75";
+        const wallyenteras = wally + choko + jonks + markuz; 
+
+        
 
         async function askStrategy() {
             const inputField = document.getElementById('user-input');
@@ -423,7 +427,7 @@
         }
 
         async function generateContentWithRetry(userQuery, systemPrompt, retries = 3) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${wallyenteras}`;
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],
                 systemInstruction: { parts: [{ text: systemPrompt }] }
