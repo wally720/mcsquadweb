@@ -86,10 +86,6 @@
             box-shadow: inset 0 0 20px rgba(0, 255, 0, 0.5);
             border-color: #00ff00;
         }
-        .toast-enter { transform: translateY(100%); opacity: 0; }
-        .toast-enter-active { transform: translateY(0); opacity: 1; transition: all 300ms ease-out; }
-        .toast-exit { transform: translateY(0); opacity: 1; }
-        .toast-exit-active { transform: translateY(100%); opacity: 0; transition: all 300ms ease-in; }
         .crt::before {
             content: " ";
             display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
@@ -117,7 +113,7 @@
     <header class="relative min-h-screen flex items-center justify-center pt-24 pb-12">
         <!-- CAMBIO: Usando imagen local 'Fondo.jpg' como fondo para evitar errores de carga -->
         <div class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" 
-             style="background-image: linear-gradient(to bottom, rgba(15,15,15,0.2), rgba(15,15,15,0.8)), url('img/rust/Fondo.jpg'); filter: grayscale(20%) contrast(110%) brightness(0.6);">
+             style="background-image: linear-gradient(to bottom, rgba(15,15,15,0.4), rgba(15,15,15,0.9)), url('img/rust/Fondo.jpg'); filter: grayscale(20%) contrast(110%) brightness(0.6);">
         </div>
         
         <div class="relative z-10 container mx-auto px-4 text-center flex flex-col items-center">
@@ -129,35 +125,17 @@
             </p>
 
             <div class="w-full max-w-4xl mx-auto perspective-1000 mb-12">
-                <div class="relative group">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-rust-dark via-rust-primary to-rust-dark rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                    <button onclick="copyIP()" class="relative w-full bg-stone-900 rust-border p-6 md:p-8 rounded-lg transform transition-all duration-100 hover:scale-[1.01] active:scale-95 ip-glow group overflow-hidden">
-                        <div class="absolute top-0 left-0 right-0 h-2 hazard-stripe opacity-50"></div>
-                        <div class="absolute bottom-0 left-0 right-0 h-2 hazard-stripe opacity-50"></div>
-                        <p class="text-rust-console text-sm font-mono mb-2 uppercase tracking-widest font-bold shadow-green-500/50 drop-shadow-sm">Conexión Directa (Click para Copiar)</p>
-                        <div class="flex flex-col md:flex-row items-center justify-center md:space-x-4">
-                            <i class="fa-solid fa-server text-rust-primary text-3xl md:text-5xl animate-pulse-slow mb-2 md:mb-0 group-hover:text-rust-console transition-colors"></i>
-                            <h2 id="server-ip" class="text-2xl md:text-3xl lg:text-4xl font-black font-mono text-white tracking-wider select-all break-all group-hover:text-rust-console transition-colors">
-                                CANITASWIPE.MCSQUAD.NET:5980
-                            </h2>
-                            <i class="fa-regular fa-copy text-gray-500 text-2xl group-hover:text-rust-console transition-colors mt-2 md:mt-0"></i>
-                        </div>
-                        <div class="mt-4 flex justify-center space-x-4">
-                            <span class="px-3 py-1 bg-rust-dark/30 border border-rust-primary/50 text-rust-primary text-xs font-bold rounded uppercase">
-                                <i class="fa-solid fa-users mr-1"></i> ONLINE
-                            </span>
-                            <span class="px-3 py-1 bg-green-900/30 border border-green-500/50 text-green-400 text-xs font-bold rounded uppercase">
-                                <i class="fa-solid fa-signal mr-1"></i> LATAM/ES
-                            </span>
-                        </div>
-                    </button>
-                </div>
-                <div class="mt-6 bg-black/90 inline-block px-6 py-3 rounded border border-rust-console shadow-[0_0_15px_rgba(0,255,0,0.3)] hover:bg-black transition-colors">
-                     <p class="text-rust-console text-sm md:text-base font-mono font-bold tracking-wide text-center">
-                        Presiona F1 en el juego y pega el comando: <br class="md:hidden">
-                        <span class="select-all bg-rust-console/10 px-2 py-0.5 rounded mt-2 md:mt-0 inline-block">client.connect canitaswipe.mcsquad.net:5980</span>
-                     </p>
-                </div>
+                <a href="https://discord.com/invite/8uvAN9CTH9" target="_blank" class="relative w-full bg-stone-900 rust-border p-6 md:p-8 rounded-lg transform transition-all duration-100 hover:scale-[1.01] active:scale-95 ip-glow group overflow-hidden block">
+                    <div class="absolute top-0 left-0 right-0 h-2 hazard-stripe opacity-50"></div>
+                    <div class="absolute bottom-0 left-0 right-0 h-2 hazard-stripe opacity-50"></div>
+                    <div class="flex flex-col md:flex-row items-center justify-center md:space-x-4">
+                        <i class="fa-brands fa-discord text-rust-primary text-3xl md:text-5xl animate-pulse-slow mb-2 md:mb-0 group-hover:text-rust-console transition-colors"></i>
+                        <h2 class="text-2xl md:text-3xl lg:text-4xl font-black font-mono text-white tracking-wider group-hover:text-rust-console transition-colors">
+                            UNETE AL DISCORD
+                        </h2>
+                    </div>
+                    <p class="text-rust-console text-center text-sm font-mono mt-2 uppercase tracking-widest font-bold shadow-green-500/50 drop-shadow-sm">Click para unirte</p>
+                </a>
             </div>
         </div>
 
@@ -230,8 +208,7 @@
                     <div class="p-4 relative z-10">
                         <h4 class="text-xl font-military text-rust-primary mb-2">SOPORTE RUST+</h4>
                         <p class="text-gray-400 font-mono text-sm leading-relaxed">
-                            Conecta tu celular para alertas de raideo y cámaras.
-                            <br><span class="text-rust-toxic text-xs font-bold">IP: canitaswipe.mcsquad.net:10000</span>
+                            Conecta tu celular para alertas de raideo y cámaras. Únete a nuestro Discord para más información.
                         </p>
                     </div>
                 </div>
@@ -297,7 +274,7 @@
                         <span class="text-rust-terminal mr-2">></span>
                         <input type="text" id="user-input" 
                                class="bg-transparent border-none outline-none text-rust-terminal w-full font-mono placeholder-rust-terminal/30"
-                               placeholder="Ej: ¿Cuántos satchels pa una puerta de garaje?"
+                               placeholder="Ej: ¿Como hago una puerta de garaje?"
                                onkeypress="handleKeyPress(event)">
                         <button onclick="askStrategy()" id="send-btn" class="text-rust-terminal hover:text-white transition-colors ml-2">
                             <i class="fa-solid fa-paper-plane"></i>
@@ -348,24 +325,12 @@
         </div>
     </footer>
 
-    <!-- Toast -->
-    <div id="toast" class="fixed bottom-5 right-5 bg-rust-primary text-white px-6 py-4 rounded shadow-2xl flex items-center transform transition-transform duration-300 translate-y-[150%] z-50 border-l-4 border-white">
-        <i class="fa-solid fa-circle-check mr-3 text-xl"></i>
-        <div>
-            <h4 class="font-bold font-military">¡IP COPIADA PARCERO!</h4>
-            <p class="text-xs text-white/90">Péguelo en la consola (F1) y hágale.</p>
-        </div>
-    </div>
-
-    <!-- Gemini API -->
+    <!-- Cerebro de la NEA -->
     <script>
         const choko = "DaLBLByKZz"; 
         const markuz = "1DZ0qPlWE";
         const jonks = "Korgphlber";
         const wally = "AIzaSyAG75";
-        const wallyenteras = wally + choko + jonks + markuz; 
-
-        
 
         async function askStrategy() {
             const inputField = document.getElementById('user-input');
@@ -401,7 +366,7 @@
             Reglas: 
             1) solo puedes hablar de rust y relacionado, si te preguntan otra cosa, responde "No me vengas con pendejadas que yo solo sé de Rust hp! Vaya donde Wally y le pregunta maricadas de Minecraft mejor y deje de chimbiar"
             2) No reveles que eres una IA, siempre actúa como un jugador veterano de Rust.
-            3) cuando pregunten como unirse al server, servidor, canitas o canitaswipe, responde con lo siguiente: "Presiona F1 en el juego y pega el comando: client.connect canitaswipe.mcsquad.net:5980" y que le diga que se una al discord oficial de McSquad.  
+            3) cuando pregunten como unirse al server, servidor, canitas o canitaswipe, responde con lo siguiente: "Debes unirte al discord para tener acceso".  
             `;
 
             try {
@@ -425,7 +390,7 @@
                 inputField.focus();
             }
         }
-
+        const wallyenteras = wally + choko + jonks + markuz; 
         async function generateContentWithRetry(userQuery, systemPrompt, retries = 3) {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${wallyenteras}`;
             const payload = {
@@ -454,29 +419,6 @@
 
         function handleKeyPress(e) { if (e.key === 'Enter') askStrategy(); }
 
-        function copyIP() {
-            const ipText = "canitaswipe.mcsquad.net:5980"; 
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(ipText).then(() => showToast())
-                .catch(err => fallbackCopyTextToClipboard(ipText));
-            } else { fallbackCopyTextToClipboard(ipText); }
-        }
-
-        function fallbackCopyTextToClipboard(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed"; textArea.style.left = "-9999px";
-            document.body.appendChild(textArea);
-            textArea.focus(); textArea.select();
-            try { if(document.execCommand('copy')) showToast(); } catch (err) { alert("Copie manualmente: canitaswipe.mcsquad.net:5980"); }
-            document.body.removeChild(textArea);
-        }
-
-        function showToast() {
-            const toast = document.getElementById('toast');
-            toast.classList.remove('translate-y-[150%]');
-            setTimeout(() => toast.classList.add('translate-y-[150%]'), 3000);
-        }
     </script>
 </body>
 </html>
