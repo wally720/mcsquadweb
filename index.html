@@ -103,14 +103,13 @@
         </p>
 
         <!--
-          Faltan dos campos por persona que solo ellos pueden llenar: "A qué se dedica"
-          y "Qué piensa hacer". Se añaden como un <dt>/<dd> más dentro de .member-facts.
-          La cabeza del skin reemplaza a .avatar: <img src="img/squad/wally.png" alt="" />
+          "A qué se dedica" y "Qué piensa hacer" son de relleno, puestos con humor
+          a la espera de que cada uno escriba el suyo.
         -->
         <div class="grid squad">
           <article class="member member--wally">
             <div class="member-head">
-              <div class="avatar" aria-hidden="true">W</div>
+              <img class="avatar" src="img/squad/wally.png" alt="Skin de Minecraft de wallyenteras" width="64" height="64" />
               <div>
                 <h3>Wally</h3>
                 <span class="role">Fundador</span>
@@ -121,12 +120,16 @@
               <dd>Uno de los tres del principio. El que empuja los proyectos hasta que existen.</dd>
               <dt>Qué ha hecho</dt>
               <dd>Los Extremos de Wally, su serie pública de Minecraft extremo, y el canal de la comunidad.</dd>
+              <dt>A qué se dedica</dt>
+              <dd>A abrir servidores nuevos antes de terminar el anterior.</dd>
+              <dt>Qué piensa hacer</dt>
+              <dd>Uno todavía más extremo. Nadie se lo ha pedido.</dd>
             </dl>
           </article>
 
           <article class="member member--choko">
             <div class="member-head">
-              <div class="avatar" aria-hidden="true">C</div>
+              <img class="avatar" src="img/squad/choko.png" alt="Skin de Minecraft de chokolv3" width="64" height="64" />
               <div>
                 <h3>Choko</h3>
                 <span class="role">Fundador</span>
@@ -137,12 +140,16 @@
               <dd>Fundador y la cara en directo de MCSquad.</dd>
               <dt>Qué ha hecho</dt>
               <dd>Transmite como chokolvl3 y hoy lleva Axios MC, el único servidor que sigue en pie.</dd>
+              <dt>A qué se dedica</dt>
+              <dd>A transmitir en vivo y a explicar por decimoquinta vez cómo entrar al server.</dd>
+              <dt>Qué piensa hacer</dt>
+              <dd>Sostener Axios MC hasta que vuelva a caber toda la banda.</dd>
             </dl>
           </article>
 
           <article class="member member--markuz">
             <div class="member-head">
-              <div class="avatar" aria-hidden="true">M</div>
+              <img class="avatar" src="img/squad/markuz.png" alt="Skin de Minecraft de Markuz_Diaz" width="64" height="64" />
               <div>
                 <h3>Markuz</h3>
                 <span class="role">Fundador</span>
@@ -153,12 +160,16 @@
               <dd>El tercero del trío original, de los que estuvieron desde la carnicería.</dd>
               <dt>Qué ha hecho</dt>
               <dd>Cokaland, célebre a partes iguales por su exceso de mods y su exceso de reglas.</dd>
+              <dt>A qué se dedica</dt>
+              <dd>A instalar un mod más. Siempre cabe un mod más.</dd>
+              <dt>Qué piensa hacer</dt>
+              <dd>Redactar el reglamento del reglamento.</dd>
             </dl>
           </article>
 
           <article class="member member--jonks">
             <div class="member-head">
-              <div class="avatar" aria-hidden="true">J</div>
+              <img class="avatar" src="img/squad/jonks.png" alt="Skin de Minecraft de eljonks" width="64" height="64" />
               <div>
                 <h3>Jonks</h3>
                 <span class="role">El cuarto que faltaba</span>
@@ -169,6 +180,10 @@
               <dd>Llegó meses después y se quedó. Terminó de conformar lo que hoy es MCSquad.</dd>
               <dt>Qué ha hecho</dt>
               <dd>The Silence, su serie de terror. La gente recuerda poco del argumento y todo de las patatas.</dd>
+              <dt>A qué se dedica</dt>
+              <dd>Al terror psicológico con presupuesto de patatas.</dd>
+              <dt>Qué piensa hacer</dt>
+              <dd>Una segunda temporada. Esta vez la gente recordará la trama.</dd>
             </dl>
           </article>
         </div>
@@ -188,15 +203,10 @@
           Cosas que hicimos para nosotros y quedaron públicas. Gratis y sin cuenta.
         </p>
 
-        <!--
-          PENDIENTE: el Launcher no tiene nombre ni enlace de descarga todavía.
-          Reemplazar el texto "Nuestro Launcher" por el nombre real, y el href del
-          botón (hoy apunta al Discord) por el enlace de descarga.
-        -->
         <article class="hero-tool">
           <div class="hero-tool-body">
             <span class="badge">Nuestra herramienta más potente</span>
-            <h3>Nuestro Launcher</h3>
+            <h3>McSquad Launcher</h3>
             <p>
               Lo quisimos desde el primer día de MCSquad. Un par de años después lo
               teníamos, y sigue vivo: es lo que usa la comunidad para entrar a nuestros
@@ -206,9 +216,12 @@
               De todo lo que hemos montado en cuatro años, es lo único que puedes usar
               hoy mismo.
             </p>
-            <a class="btn btn-lg" href="https://discord.com/invite/8uvAN9CTH9" target="_blank" rel="noopener">
-              Descargar el Launcher
+            <a class="btn btn-discord btn-lg" href="https://discord.com/invite/8uvAN9CTH9" target="_blank" rel="noopener">
+              Descargarlo en el Discord
             </a>
+            <p class="hero-tool-where">
+              La descarga está en el Discord, que es donde vive todo lo nuestro.
+            </p>
           </div>
         </article>
 
@@ -238,7 +251,7 @@
             <h3 class="tl-title">Donde empezó todo</h3>
             <ul class="tl-items">
               <li class="tl-item">
-                <h4>SálvameCraft X</h4>
+                <h4>SalvamecraftX</h4>
                 <p>
                   Nuestro primer proyecto y el que todavía nos define: un servidor
                   especializado en la dificultad del juego. Aguantó varias versiones.
@@ -308,7 +321,6 @@
             </ul>
           </div>
 
-          <!-- PENDIENTE: enlace de Axios MC (IP, web o Discord) para la tarjeta de abajo -->
           <div class="tl-group tl-group--live">
             <h3 class="tl-title">Ahora mismo</h3>
             <ul class="tl-items">
@@ -316,8 +328,11 @@
                 <h4>Axios MC</h4>
                 <p>
                   El único que sigue en pie. Es el proyecto de chokolvl3, y la comunidad
-                  lo acompaña. Si quieres entrar, pregunta en el Discord.
+                  lo acompaña.
                 </p>
+                <a class="tl-cta" href="https://discord.com/invite/8uvAN9CTH9" target="_blank" rel="noopener">
+                  Pedir acceso en el Discord →
+                </a>
               </li>
             </ul>
           </div>
@@ -355,9 +370,23 @@
     <section id="redes" class="section">
       <div class="container reveal">
         <h2>Nuestras Redes</h2>
-        <p>Por acá seguimos apareciendo. El Discord es donde de verdad pasa todo.</p>
+
+        <a class="discord-block" href="https://discord.com/invite/8uvAN9CTH9" target="_blank" rel="noopener">
+          <span class="discord-block-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.369a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.249a18.27 18.27 0 00-5.478 0 12.3 12.3 0 00-.617-1.249.077.077 0 00-.079-.037 19.736 19.736 0 00-4.885 1.515.07.07 0 00-.032.027C1.83 9.063.944 13.63 1.335 18.144a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.08.08 0 00.086-.028c.462-.63.874-1.295 1.226-1.994a.078.078 0 00-.043-.108 13.107 13.107 0 01-1.872-.893.08.08 0 01-.008-.134c.126-.094.252-.192.372-.291a.074.074 0 01.077-.01c3.928 1.792 8.18 1.792 12.062 0a.074.074 0 01.078.01c.12.099.245.197.372.291a.08.08 0 01-.007.134c-.6.35-1.227.646-1.873.893a.078.078 0 00-.042.109c.36.698.772 1.363 1.225 1.993a.08.08 0 00.086.029 19.86 19.86 0 005.993-3.03.08.08 0 00.03-.057c.5-5.177-.838-9.71-3.548-13.748a.067.067 0 00-.031-.027zM9.681 15.347c-1.183 0-2.157-1.09-2.157-2.426 0-1.336.956-2.426 2.157-2.426 1.21 0 2.175 1.1 2.157 2.426 0 1.336-.956 2.426-2.157 2.426zm4.64 0c-1.183 0-2.157-1.09-2.157-2.426 0-1.336.955-2.426 2.157-2.426 1.21 0 2.176 1.1 2.157 2.426 0 1.336-.946 2.426-2.157 2.426z"/></svg>
+          </span>
+          <span class="discord-block-text">
+            <strong>El Discord de MCSquad</strong>
+            <span>
+              Acá está todo: el Launcher, el acceso a Axios MC, los anuncios y la gente.
+              Las demás redes son el escaparate; esto es la casa.
+            </span>
+          </span>
+          <span class="discord-block-go" aria-hidden="true">→</span>
+        </a>
+
+        <p class="social-label">Y por acá también aparecemos:</p>
         <div class="social">
-          <a class="btn btn-discord" href="https://discord.com/invite/8uvAN9CTH9" target="_blank" rel="noopener">Discord</a>
           <a class="btn outline" href="https://www.twitch.tv/chokolvl3" target="_blank" rel="noopener">Twitch</a>
           <a class="btn outline" href="https://www.youtube.com/@wallyenteras" target="_blank" rel="noopener">YouTube</a>
           <a class="btn outline" href="https://x.com/mcsquadof" target="_blank" rel="noopener">X</a>
@@ -394,6 +423,12 @@
       <a href="#top" class="back-to-top">Volver arriba</a>
     </div>
   </footer>
+
+  <!-- Acceso al Discord siempre a la vista: es donde esta centralizado todo -->
+  <a class="discord-float" href="https://discord.com/invite/8uvAN9CTH9" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.369a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.249a18.27 18.27 0 00-5.478 0 12.3 12.3 0 00-.617-1.249.077.077 0 00-.079-.037 19.736 19.736 0 00-4.885 1.515.07.07 0 00-.032.027C1.83 9.063.944 13.63 1.335 18.144a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.08.08 0 00.086-.028c.462-.63.874-1.295 1.226-1.994a.078.078 0 00-.043-.108 13.107 13.107 0 01-1.872-.893.08.08 0 01-.008-.134c.126-.094.252-.192.372-.291a.074.074 0 01.077-.01c3.928 1.792 8.18 1.792 12.062 0a.074.074 0 01.078.01c.12.099.245.197.372.291a.08.08 0 01-.007.134c-.6.35-1.227.646-1.873.893a.078.078 0 00-.042.109c.36.698.772 1.363 1.225 1.993a.08.08 0 00.086.029 19.86 19.86 0 005.993-3.03.08.08 0 00.03-.057c.5-5.177-.838-9.71-3.548-13.748a.067.067 0 00-.031-.027zM9.681 15.347c-1.183 0-2.157-1.09-2.157-2.426 0-1.336.956-2.426 2.157-2.426 1.21 0 2.175 1.1 2.157 2.426 0 1.336-.956 2.426-2.157 2.426zm4.64 0c-1.183 0-2.157-1.09-2.157-2.426 0-1.336.955-2.426 2.157-2.426 1.21 0 2.176 1.1 2.157 2.426 0 1.336-.946 2.426-2.157 2.426z"/></svg>
+    <span>Caé al Discord</span>
+  </a>
 
   <script src="onepage.js"></script>
 </body>

@@ -73,19 +73,34 @@ Solo un proyecto debería llevar `tl-group--live` y `tl-item--live` a la vez: es
 ## Cómo completar las tarjetas del squad
 
 Cada miembro tiene su color (`.member--wally`, `--markuz`, `--jonks`, `--choko`) definido en
-`onepage.css`. Faltan dos campos por persona, que se añaden como un par más dentro de
-`<dl class="member-facts">`:
+`onepage.css`, y cuatro campos dentro de `<dl class="member-facts">`.
 
-```html
-<dt>A qué se dedica</dt>
-<dd>…</dd>
-<dt>Qué piensa hacer</dt>
-<dd>…</dd>
+> ⚠️ **"A qué se dedica" y "Qué piensa hacer" son de relleno**, escritos en broma hasta que
+> cada uno ponga el suyo. Se cambian editando el `<dd>` que toca.
+
+### Las cabezas de skin
+
+Están en `img/squad/`, descargadas de `minotar.net` y guardadas en el repo para no depender
+de un servicio externo. Los usuarios son:
+
+| Archivo | Usuario de Minecraft |
+|---|---|
+| `wally.png` | `wallyenteras` |
+| `choko.png` | `chokolv3` |
+| `markuz.png` | `Markuz_Diaz` |
+| `jonks.png` | `eljonks` |
+
+Para actualizarlas cuando alguien cambie de skin:
+
+```bash
+curl -o img/squad/wally.png https://minotar.net/helm/wallyenteras/128.png
 ```
 
-Para poner la cabeza del skin en vez de la inicial, sustituye el `<div class="avatar">` por
-`<img src="img/squad/wally.png" alt="" width="64" height="64" />`. El CSS ya le aplica
-`image-rendering: pixelated`, que es lo que evita que un skin de 8×8 salga borroso.
+El CSS les aplica `image-rendering: pixelated`, que es lo que evita que una cabeza de 8×8
+salga borrosa al ampliarla.
+
+> Si el usuario no existe, `minotar` devuelve el Steve por defecto sin dar error. Para
+> detectarlo, compara el md5 del resultado con el de un nombre inventado.
 
 **Si cambias un color:** los `--c` (color vivo) se usan en texto pequeño sobre el fondo
 `--c-deep`. Los tonos medios se quedan en 3,6–4,1:1 y no pasan AA — por eso son claros. Si

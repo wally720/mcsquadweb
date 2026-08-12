@@ -141,6 +141,7 @@ main{padding-top:var(--header-h)}
 .member--choko { --c: 110,231,183; --c-deep:   6,78, 59 }
 
 .member-head{display:flex; align-items:center; gap:14px; margin-bottom:16px}
+/* .avatar sirve tanto para la cabeza del skin (<img>) como para la inicial (<div>) */
 .member .avatar{
   flex:0 0 auto; width:64px; height:64px;
   display:grid; place-items:center;
@@ -148,10 +149,10 @@ main{padding-top:var(--header-h)}
   background:rgba(var(--c),.9); color:rgba(var(--c-deep),1);
   border:1px solid rgba(var(--c),.5);
 }
-/* Cuando llegue la cabeza del skin, sustituye al .avatar en el mismo hueco */
-.member .avatar img, .member-head > img{
-  width:64px; height:64px; border-radius:14px;
-  image-rendering: pixelated; /* los skins son de 8x8: sin esto salen borrosos */
+img.avatar{
+  object-fit:cover;
+  image-rendering: pixelated; /* las cabezas son de 8x8: sin esto salen borrosas */
+  background:rgba(var(--c),.28);
 }
 .member h3{margin:0; font-size:21px}
 .member .role{font-size:14px; font-weight:700; color:rgb(var(--c))}
@@ -244,7 +245,49 @@ main{padding-top:var(--header-h)}
 }
 .gallery-empty p{margin:0 auto; max-width:52ch}
 
-.social{display:flex; gap:12px; flex-wrap:wrap; margin-top:24px}
+/* Discord: es donde esta centralizado todo, asi que no compite con las demas redes */
+.discord-block{
+  display:flex; align-items:center; gap:18px;
+  margin-top:26px; padding:24px;
+  border-radius:20px; text-decoration:none; color:inherit;
+  background:linear-gradient(135deg, #5865F2, #4752C4);
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow:0 16px 40px rgba(23,30,90,.45);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.discord-block:hover{transform:translateY(-3px); box-shadow:0 20px 50px rgba(23,30,90,.6)}
+.discord-block-icon{flex:0 0 auto; width:56px; height:56px; color:#fff}
+.discord-block-icon svg{width:100%; height:100%}
+.discord-block-text{display:grid; gap:6px}
+.discord-block-text strong{font-size:clamp(20px,2.6vw,26px)}
+.discord-block-text span{font-size:15px; line-height:1.5; opacity:.95}
+.discord-block-go{flex:0 0 auto; font-size:30px; font-weight:800; opacity:.85}
+
+.social-label{margin:26px 0 0; font-size:15px; opacity:.85}
+.social{display:flex; gap:12px; flex-wrap:wrap; margin-top:12px}
+
+/* Enlace dentro de un hito de la linea de tiempo */
+.tl-cta{
+  display:inline-block; margin-top:10px;
+  font-weight:700; color:#6ee7b7; text-decoration:none;
+}
+.tl-cta:hover{text-decoration:underline}
+
+.hero-tool-where{margin:12px 0 0; font-size:14px; opacity:.85}
+
+/* Boton flotante: el Discord siempre a un toque, en cualquier punto de la web */
+.discord-float{
+  position:fixed; right:20px; bottom:20px; z-index:1500;
+  display:inline-flex; align-items:center; gap:10px;
+  padding:14px 20px; border-radius:999px;
+  background:linear-gradient(135deg,#5865F2,#4752C4); color:#fff;
+  text-decoration:none; font-weight:800;
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow:0 12px 30px rgba(0,0,0,.45);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.discord-float:hover{transform:translateY(-2px) scale(1.03); box-shadow:0 16px 38px rgba(23,30,90,.6)}
+.discord-float svg{width:22px; height:22px; flex:0 0 auto}
 
 /* Footer */
 .site-footer{padding:20px var(--pad-x); background:#0b0f1a; color:#c8d3e8}
@@ -362,6 +405,14 @@ section{scroll-margin-top: calc(var(--header-h) + 16px)}
   .main-nav .btn-discord{margin-top:14px; justify-content:center; padding:14px}
 
   .section{min-height:auto; padding:72px 0}
+
+  .discord-block{gap:14px; padding:18px}
+  .discord-block-icon{width:42px; height:42px}
+  .discord-block-go{display:none}
+
+  .discord-float{right:14px; bottom:14px; padding:12px 18px}
+  /* Que el boton flotante no tape el pie */
+  .site-footer{padding-bottom:84px}
 }
 
 /* Accesibilidad: reducir animaciones si el usuario lo prefiere */
