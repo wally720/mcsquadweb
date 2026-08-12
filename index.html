@@ -50,6 +50,7 @@
       <a href="#que-somos">¿Qué somos?</a>
       <a href="#quienes-somos">¿Quiénes somos?</a>
       <a href="#herramientas">Herramientas</a>
+      <a href="#proyectos">Proyectos</a>
       <a href="#galeria">Galería</a>
       <a href="#redes">Nuestras Redes</a>
       <a href="#vuelve">Vuelve al parche</a>
@@ -67,15 +68,15 @@
       <div class="container reveal">
         <h2>¿Qué somos?</h2>
         <p class="lead">
-          MCSquad se armó por los juegos y se quedó por la gente. Empezó en un servidor
-          de Minecraft, pasó por Rust y por un montón de noches que ya nadie recuerda
-          bien, pero que todos recordamos con cariño.
+          MCSquad se armó por los juegos y se quedó por la gente. Llevamos más de
+          cuatro años montando servidores: de rol, de dificultad imposible, de puro
+          chill, y también de Rust. Una docena larga, contando los que duraron un mes.
         </p>
         <p>
-          Ahorita estamos dormidos. Sin servidor propio y sin eventos, pero con el
-          Discord abierto y las ganas intactas. Esta página existe por una sola razón:
-          volver a juntar la banda. Si estuviste, ya sabes dónde es. Si no estuviste,
-          llegas justo a tiempo para el nuevo comienzo.
+          Ahorita la comunidad está dormida, no apagada. Nuestro Launcher sigue vivo y
+          se sigue usando, y Axios MC está arriba. Lo que falta es la gente. Esta página
+          existe por una sola razón: volver a juntar la banda. Si estuviste, ya sabes
+          dónde es. Si no estuviste, llegas justo a tiempo para lo que viene.
         </p>
         <p>
           <a class="btn btn-discord btn-lg" href="https://discord.com/invite/8uvAN9CTH9" target="_blank" rel="noopener">
@@ -89,33 +90,86 @@
     <section id="quienes-somos" class="section">
       <div class="container reveal">
         <h2>¿Quiénes somos?</h2>
+        <p class="lead">
+          Esto empezó en una carnicería.
+        </p>
         <p>
-          Un grupo de amigos que se conoció jugando y terminó montando servidores,
-          organizando eventos y haciendo herramientas por puro gusto. Estos son los que
-          siempre estuvieron moviendo la cosa:
+          Wally, Choko y Markuz se conocieron trabajando juntos en una carnicería
+          in-game, en el servidor de Minecraft que abrió el streamer Tanizen después de
+          TortillaLand. De pasar el turno picando carne salió la idea de montar lo
+          nuestro. Meses después llegó Jonks, que no vino invitado: se ganó el puesto
+          apoyando a la comunidad hasta volverse parte de ella. Ahí quedó armada
+          MCSquad, y de eso hace más de cuatro años.
         </p>
 
-        <!-- Los roles de cada uno los completa Wally: agregar dentro de <span> -->
+        <!--
+          Faltan dos campos por persona que solo ellos pueden llenar: "A qué se dedica"
+          y "Qué piensa hacer". Se añaden como un <dt>/<dd> más dentro de .member-facts.
+          La cabeza del skin reemplaza a .avatar: <img src="img/squad/wally.png" alt="" />
+        -->
         <div class="grid squad">
-          <article class="member">
-            <div class="avatar" aria-hidden="true">W</div>
-            <h3>Wally</h3>
-            <span>Fundador</span>
+          <article class="member member--wally">
+            <div class="member-head">
+              <div class="avatar" aria-hidden="true">W</div>
+              <div>
+                <h3>Wally</h3>
+                <span class="role">Fundador</span>
+              </div>
+            </div>
+            <dl class="member-facts">
+              <dt>Quién es</dt>
+              <dd>Uno de los tres del principio. El que empuja los proyectos hasta que existen.</dd>
+              <dt>Qué ha hecho</dt>
+              <dd>Los Extremos de Wally, su serie pública de Minecraft extremo, y el canal de la comunidad.</dd>
+            </dl>
           </article>
-          <article class="member">
-            <div class="avatar" aria-hidden="true">C</div>
-            <h3>Choko</h3>
-            <span>Streamer</span>
+
+          <article class="member member--choko">
+            <div class="member-head">
+              <div class="avatar" aria-hidden="true">C</div>
+              <div>
+                <h3>Choko</h3>
+                <span class="role">Fundador</span>
+              </div>
+            </div>
+            <dl class="member-facts">
+              <dt>Quién es</dt>
+              <dd>Fundador y la cara en directo de MCSquad.</dd>
+              <dt>Qué ha hecho</dt>
+              <dd>Transmite como chokolvl3 y hoy lleva Axios MC, el único servidor que sigue en pie.</dd>
+            </dl>
           </article>
-          <article class="member">
-            <div class="avatar" aria-hidden="true">M</div>
-            <h3>Markuz</h3>
-            <span>Squad</span>
+
+          <article class="member member--markuz">
+            <div class="member-head">
+              <div class="avatar" aria-hidden="true">M</div>
+              <div>
+                <h3>Markuz</h3>
+                <span class="role">Fundador</span>
+              </div>
+            </div>
+            <dl class="member-facts">
+              <dt>Quién es</dt>
+              <dd>El tercero del trío original, de los que estuvieron desde la carnicería.</dd>
+              <dt>Qué ha hecho</dt>
+              <dd>Cokaland, célebre a partes iguales por su exceso de mods y su exceso de reglas.</dd>
+            </dl>
           </article>
-          <article class="member">
-            <div class="avatar" aria-hidden="true">J</div>
-            <h3>Jonks</h3>
-            <span>Squad</span>
+
+          <article class="member member--jonks">
+            <div class="member-head">
+              <div class="avatar" aria-hidden="true">J</div>
+              <div>
+                <h3>Jonks</h3>
+                <span class="role">El cuarto que faltaba</span>
+              </div>
+            </div>
+            <dl class="member-facts">
+              <dt>Quién es</dt>
+              <dd>Llegó meses después y se quedó. Terminó de conformar lo que hoy es MCSquad.</dd>
+              <dt>Qué ha hecho</dt>
+              <dd>The Silence, su serie de terror. La gente recuerda poco del argumento y todo de las patatas.</dd>
+            </dl>
           </article>
         </div>
 
@@ -131,9 +185,33 @@
       <div class="container reveal">
         <h2>Herramientas</h2>
         <p>
-          Cositas que hicimos para nosotros mismos y quedaron públicas. Gratis, sin
-          cuenta y sin instalar nada.
+          Cosas que hicimos para nosotros y quedaron públicas. Gratis y sin cuenta.
         </p>
+
+        <!--
+          PENDIENTE: el Launcher no tiene nombre ni enlace de descarga todavía.
+          Reemplazar el texto "Nuestro Launcher" por el nombre real, y el href del
+          botón (hoy apunta al Discord) por el enlace de descarga.
+        -->
+        <article class="hero-tool">
+          <div class="hero-tool-body">
+            <span class="badge">Nuestra herramienta más potente</span>
+            <h3>Nuestro Launcher</h3>
+            <p>
+              Lo quisimos desde el primer día de MCSquad. Un par de años después lo
+              teníamos, y sigue vivo: es lo que usa la comunidad para entrar a nuestros
+              servidores sin pelear con versiones, mods ni configuraciones.
+            </p>
+            <p class="hero-tool-note">
+              De todo lo que hemos montado en cuatro años, es lo único que puedes usar
+              hoy mismo.
+            </p>
+            <a class="btn btn-lg" href="https://discord.com/invite/8uvAN9CTH9" target="_blank" rel="noopener">
+              Descargar el Launcher
+            </a>
+          </div>
+        </article>
+
         <div class="grid cards">
           <a class="card tool-card" href="tele.html">
             <h3>Teleprompter</h3>
@@ -147,24 +225,105 @@
       </div>
     </section>
 
-    <!--
-      4. Proyectos — pendiente del copy de Wally.
-      Para publicarla: descomentar este bloque y añadir
-      <a href="#proyectos">Proyectos</a> en la nav de arriba.
-
+    <!-- 4. Proyectos -->
     <section id="proyectos" class="section">
       <div class="container reveal">
         <h2>Proyectos</h2>
-        <p>[copy de Wally]</p>
-        <div class="grid cards">
-          <article class="card">
-            <h3>[título]</h3>
-            <p>[descripción]</p>
-          </article>
+        <p class="lead">
+          Cuatro años, una docena larga de servidores y ni uno igual al anterior.
+        </p>
+
+        <div class="timeline">
+          <div class="tl-group">
+            <h3 class="tl-title">Donde empezó todo</h3>
+            <ul class="tl-items">
+              <li class="tl-item">
+                <h4>SálvameCraft X</h4>
+                <p>
+                  Nuestro primer proyecto y el que todavía nos define: un servidor
+                  especializado en la dificultad del juego. Aguantó varias versiones.
+                </p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="tl-group">
+            <h3 class="tl-title">De sufrir</h3>
+            <ul class="tl-items">
+              <li class="tl-item">
+                <h4>Los Extremos de Wally</h4>
+                <p>Serie pública de Minecraft extremo. Extremo de verdad, no de folleto.</p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="tl-group">
+            <h3 class="tl-title">De rol</h3>
+            <ul class="tl-items">
+              <li class="tl-item">
+                <h4>Bandidos</h4>
+                <p>Serie de rol ambientada en el lejano oeste.</p>
+              </li>
+              <li class="tl-item">
+                <h4>Luna de Sangre</h4>
+                <p>Rol de épocas antiguas.</p>
+              </li>
+              <li class="tl-item">
+                <h4>The Silence</h4>
+                <p>
+                  La serie de terror de Jonks. La gente recuerda poco del argumento y
+                  todo de las patatas.
+                </p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="tl-group">
+            <h3 class="tl-title">De pasarla bien</h3>
+            <ul class="tl-items">
+              <li class="tl-item">
+                <h4>MildCraft</h4>
+                <p>En sus varias versiones. Sin más ambición que pasarla chill.</p>
+              </li>
+              <li class="tl-item">
+                <h4>Cokaland</h4>
+                <p>
+                  El de Markuz, célebre a partes iguales por su exceso de mods y su
+                  exceso de reglas.
+                </p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="tl-group">
+            <h3 class="tl-title">Fuera de Minecraft</h3>
+            <ul class="tl-items">
+              <li class="tl-item">
+                <h4>Canitas Wipe</h4>
+                <p>
+                  Nuestro servidor de Rust: wipe bisemanal y eventos custom. Ya está
+                  cerrado, pero fue nuestro.
+                </p>
+              </li>
+            </ul>
+          </div>
+
+          <!-- PENDIENTE: enlace de Axios MC (IP, web o Discord) para la tarjeta de abajo -->
+          <div class="tl-group tl-group--live">
+            <h3 class="tl-title">Ahora mismo</h3>
+            <ul class="tl-items">
+              <li class="tl-item tl-item--live">
+                <h4>Axios MC</h4>
+                <p>
+                  El único que sigue en pie. Es el proyecto de chokolvl3, y la comunidad
+                  lo acompaña. Si quieres entrar, pregunta en el Discord.
+                </p>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
-    -->
 
     <!-- 5. Galería -->
     <section id="galeria" class="section">

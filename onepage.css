@@ -120,17 +120,111 @@ main{padding-top:var(--header-h)}
 .card h3{margin:0 0 8px}
 .card p{margin:0; font-size:16px}
 
-/* Tarjetas del squad */
-.squad{grid-template-columns: repeat(auto-fit, minmax(190px,1fr))}
-.member{padding:20px; border-radius:14px; background:rgba(0,0,0,.32); border:1px solid rgba(255,255,255,.24); text-align:center}
-.member .avatar{
-  width:64px; height:64px; margin:0 auto 12px;
-  display:grid; place-items:center;
-  border-radius:50%; font-weight:800; font-size:24px;
-  background:linear-gradient(135deg,#00e0ff,#9d4edd); color:#0b1220;
+/* Tarjetas del squad, una por color.
+   --c es el color vivo (acentos) y --c-deep el oscuro (fondo). Los oscuros estan
+   elegidos para pasar AA con texto blanco: los vivos no aguantan texto encima. */
+.squad{grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr))}
+.member{
+  --c: 0,224,255; --c-deep: 15,23,42;
+  padding:22px; border-radius:16px;
+  background:
+    linear-gradient(160deg, rgba(var(--c),.14), rgba(var(--c),0) 60%),
+    rgba(var(--c-deep),.92);
+  border:1px solid rgba(var(--c),.42);
+  box-shadow: 0 10px 30px rgba(0,0,0,.28);
 }
-.member h3{margin:0 0 4px; font-size:19px}
-.member span{font-size:14px; opacity:.85}
+/* Los --c van deliberadamente claros: se usan en texto pequeno (el rol y los <dt>)
+   sobre el fondo oscuro, y los tonos medios se quedaban en 3.6-4.1:1. */
+.member--wally { --c: 196,181,253; --c-deep:  76,29,149 }
+.member--markuz{ --c: 252,165,165; --c-deep: 127,29, 29 }
+.member--jonks { --c: 147,197,253; --c-deep:  30,58,138 }
+.member--choko { --c: 110,231,183; --c-deep:   6,78, 59 }
+
+.member-head{display:flex; align-items:center; gap:14px; margin-bottom:16px}
+.member .avatar{
+  flex:0 0 auto; width:64px; height:64px;
+  display:grid; place-items:center;
+  border-radius:14px; font-weight:800; font-size:26px;
+  background:rgba(var(--c),.9); color:rgba(var(--c-deep),1);
+  border:1px solid rgba(var(--c),.5);
+}
+/* Cuando llegue la cabeza del skin, sustituye al .avatar en el mismo hueco */
+.member .avatar img, .member-head > img{
+  width:64px; height:64px; border-radius:14px;
+  image-rendering: pixelated; /* los skins son de 8x8: sin esto salen borrosos */
+}
+.member h3{margin:0; font-size:21px}
+.member .role{font-size:14px; font-weight:700; color:rgb(var(--c))}
+
+.member-facts{margin:0; display:grid; gap:4px}
+.member-facts dt{
+  font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  color:rgb(var(--c)); opacity:.9;
+}
+.member-facts dd{margin:0 0 12px; font-size:15px; line-height:1.5}
+.member-facts dd:last-child{margin-bottom:0}
+
+/* Herramienta destacada (el Launcher) */
+.hero-tool{
+  margin-top:28px; padding:28px;
+  border-radius:20px;
+  background:
+    linear-gradient(135deg, rgba(0,224,255,.16), rgba(157,78,221,.16)),
+    rgba(0,0,0,.42);
+  border:1px solid rgba(255,255,255,.3);
+  box-shadow: 0 16px 46px rgba(0,0,0,.34);
+}
+.hero-tool .badge{
+  display:inline-block; margin-bottom:12px;
+  padding:6px 12px; border-radius:999px;
+  font-size:12px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+  background:linear-gradient(90deg,#00e0ff,#9d4edd); color:#08111f;
+}
+.hero-tool h3{margin:0 0 10px; font-size:clamp(24px,3.6vw,34px)}
+.hero-tool p{margin:0 0 12px; max-width:62ch}
+.hero-tool .hero-tool-note{font-weight:700; opacity:1}
+.hero-tool .btn{margin-top:8px}
+
+/* Linea de tiempo de proyectos */
+.timeline{position:relative; margin-top:32px; padding-left:34px}
+.timeline::before{
+  content:''; position:absolute; left:9px; top:6px; bottom:6px; width:3px;
+  border-radius:3px;
+  background:linear-gradient(180deg,#00e0ff,#9d4edd);
+  transform-origin: top center;
+}
+.tl-group{position:relative; margin-bottom:34px}
+.tl-group:last-child{margin-bottom:0}
+.tl-title{
+  margin:0 0 14px; font-size:13px; font-weight:800;
+  letter-spacing:.1em; text-transform:uppercase; opacity:.9;
+}
+.tl-title::before{
+  content:''; position:absolute; left:-34px; top:2px;
+  width:21px; height:21px; border-radius:50%;
+  background:#0b0f1a; border:3px solid #00e0ff;
+}
+.tl-items{list-style:none; margin:0; padding:0; display:grid; gap:12px}
+.tl-item{
+  padding:16px 18px; border-radius:14px;
+  background:rgba(0,0,0,.32); border:1px solid rgba(255,255,255,.24);
+}
+.tl-item h4{margin:0 0 6px; font-size:18px}
+.tl-item p{margin:0; font-size:15px; line-height:1.5}
+
+/* El unico activo se distingue del resto */
+.tl-group--live .tl-title{color:#6ee7b7; opacity:1}
+.tl-group--live .tl-title::before{border-color:#34d399; box-shadow:0 0 0 6px rgba(52,211,153,.22)}
+.tl-item--live{
+  background:linear-gradient(135deg, rgba(52,211,153,.18), rgba(0,0,0,.32));
+  border-color:rgba(52,211,153,.55);
+}
+.tl-item--live h4::after{
+  content:'EN LÍNEA'; margin-left:10px; vertical-align:middle;
+  padding:3px 9px; border-radius:999px;
+  font-size:10px; font-weight:800; letter-spacing:.08em;
+  background:#34d399; color:#04231a;
+}
 
 /* Tarjeta de herramienta enlazable */
 .tool-card{
@@ -165,6 +259,70 @@ main{padding-top:var(--header-h)}
 /* Fade entre transiciones (secciones completas) */
 .section.fade-init{opacity:0; transform: translateY(32px); transition: opacity 2.5s ease, transform 1.05s ease; will-change: transform, opacity}
 .section.fade-in{opacity:1; transform:none}
+
+/* ---------- Animaciones ligadas al scroll ----------
+   Corren en el compositor, fuera del hilo principal, asi que aguantan 60fps en
+   movil mucho mejor que cualquier libreria JS. Solo se anima transform y opacity:
+   cualquier otra propiedad fuerza repintados y tira la fluidez justo en el celular,
+   que es donde se va a abrir esta web.
+
+   Todo va dentro de @supports. Donde no exista animation-timeline, el
+   IntersectionObserver de onepage.js sigue dando el reveal basico y nadie ve una
+   web rota. */
+
+@keyframes rise-in  { from{opacity:0; transform:translateY(52px)}             to{opacity:1; transform:none} }
+@keyframes pop-in   { from{opacity:0; transform:translateY(38px) scale(.94)}  to{opacity:1; transform:none} }
+@keyframes draw-line{ from{transform:scaleY(0)}                               to{transform:scaleY(1)} }
+@keyframes drift-up { from{transform:translateY(30px)}                        to{transform:translateY(-20px)} }
+@keyframes progress { from{transform:scaleX(0)}                               to{transform:scaleX(1)} }
+
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion: no-preference){
+
+    /* Barra de progreso de lectura, arriba del todo */
+    body::after{
+      content:''; position:fixed; inset:0 0 auto 0; height:4px; z-index:2000;
+      background:linear-gradient(90deg,#00e0ff,#9d4edd);
+      transform-origin:left center;
+      animation: progress linear both;
+      animation-timeline: scroll(root block);
+    }
+
+    /* El reveal pasa a depender del scroll. Las clases que pone el IO dejan de
+       mandar porque las animaciones ganan en la cascada. */
+    .reveal, .reveal.visible{
+      transition:none;
+      animation: rise-in linear both;
+      animation-timeline: view();
+      animation-range: entry 8% cover 34%;
+    }
+
+    /* Con lo anterior, el fade de seccion por JS sobra */
+    .section.fade-init, .section.fade-in{opacity:1; transform:none; transition:none}
+
+    /* Cada tarjeta lleva su propia linea de tiempo, asi que el escalonado sale
+       solo del scroll en vez de a base de delays fijos */
+    .member, .tl-item, .card, .hero-tool, .gallery-empty, .chips li{
+      animation: pop-in linear both;
+      animation-timeline: view();
+      animation-range: entry 4% cover 26%;
+    }
+
+    /* El eje de la linea de tiempo se dibuja solo conforme se baja */
+    .timeline::before{
+      animation: draw-line linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 72%;
+    }
+
+    /* Los titulares se mueven mas despacio que el resto: parallax */
+    .section h2{
+      animation: drift-up linear both;
+      animation-timeline: view();
+      animation-range: entry cover;
+    }
+  }
+}
 
 /* Navegación: compensación del header para anclas */
 section{scroll-margin-top: calc(var(--header-h) + 16px)}
@@ -207,8 +365,14 @@ section{scroll-margin-top: calc(var(--header-h) + 16px)}
 }
 
 /* Accesibilidad: reducir animaciones si el usuario lo prefiere */
+/* Accesibilidad: con animaciones tan marcadas esto deja de ser un detalle. El
+   movimiento intenso ligado al scroll produce mareo a bastante gente, asi que
+   todo lo de arriba esta detras de (prefers-reduced-motion: no-preference) y
+   aqui ademas se apaga cualquier resto. */
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   .reveal, .section.fade-init{transition:none; transform:none; opacity:1}
   .btn, .tool-card, .main-nav, .nav-toggle .bars::before, .nav-toggle .bars::after{transition:none}
+  .reveal, .member, .tl-item, .card, .hero-tool, .gallery-empty, .chips li,
+  .timeline::before, .section h2, body::after{animation:none; transform:none; opacity:1}
 }
