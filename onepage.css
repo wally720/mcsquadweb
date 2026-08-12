@@ -359,7 +359,7 @@ img.avatar{
       transition:none;
       animation: rise-in linear both;
       animation-timeline: view();
-      animation-range: entry 8% cover 34%;
+      animation-range: entry 0% entry 100%;
     }
 
     /* Con lo anterior, el fade de seccion por JS sobra */
@@ -370,7 +370,7 @@ img.avatar{
     .member, .tl-item, .card, .hero-tool, .gallery-empty, .chips li{
       animation: pop-in linear both;
       animation-timeline: view();
-      animation-range: entry 4% cover 26%;
+      animation-range: entry 0% entry 95%;
     }
 
     /* El eje de la linea de tiempo se dibuja solo conforme se baja */
