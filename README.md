@@ -1,11 +1,16 @@
 # MCSquad — mcsquad.cc
 
-Sitio web de **MCSquad**, una comunidad gamer con más de cuatro años encima. Nació de
-tres personas que se conocieron trabajando en una carnicería in-game, y de ahí salieron
-una docena larga de servidores de Minecraft y de Rust.
+Sitio web de **MCSquad**, *una comunidad de gamers para gamers*. Más de cuatro años
+encima: nació de tres personas que se conocieron trabajando en una carnicería in-game, y
+de ahí salieron una docena larga de servidores de Minecraft y de Rust, además de un
+launcher propio.
 
-La web es una **convocatoria**: su único trabajo es que la gente que estuvo vuelva a caer
-al Discord. Todo lo demás es secundario.
+La web tiene un solo trabajo: que quien llegue acabe en el Discord. Todo lo demás es
+secundario.
+
+> **Tono del copy.** Se escribe en presente y desde una comunidad que está activa. Nada de
+> "estamos volviendo", "la comunidad está dormida" ni frases que den a entender que esto
+> estuvo muerto. La historia se cuenta con orgullo, no como despedida.
 
 👉 **Discord:** https://discord.com/invite/rGk6Q2dsDN
 

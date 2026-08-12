@@ -14,8 +14,8 @@ const io = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-// Resaltar enlace activo en navegación según sección visible
-const sections = Array.from(document.querySelectorAll('main section'));
+// La portada se queda fuera: no tiene enlace en la nav y no debe entrar con fade
+const sections = Array.from(document.querySelectorAll('main section:not(.hero)'));
 const navLinks = Array.from(document.querySelectorAll('.main-nav a'));
 
 const byId = (id) => navLinks.find(a => a.getAttribute('href') === `#${id}`);
@@ -87,6 +87,19 @@ if (navToggle && mainNav) {
   window.matchMedia('(min-width: 821px)').addEventListener('change', (e) => {
     if (e.matches) setNav(false);
   });
+}
+
+// El Discord flotante solo aparece cuando la portada ya no se ve: alli arriba
+// estaria duplicando el boton grande que la portada ya tiene.
+const floatBtn = document.querySelector('.discord-float');
+const hero = document.querySelector('.hero');
+if (floatBtn && hero) {
+  new IntersectionObserver(([entry]) => {
+    floatBtn.classList.toggle('is-visible', !entry.isIntersecting);
+  }, { threshold: 0.15 }).observe(hero);
+} else if (floatBtn) {
+  // Sin portada que observar, mejor visible que perdido
+  floatBtn.classList.add('is-visible');
 }
 
 // Botón "Volver arriba"
