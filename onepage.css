@@ -147,7 +147,7 @@ main{padding-top:var(--header-h)}
 #proyectos     { --tint:   6,78,59;  --photo: url('img/fondo-proyectos.jpg') }
 #galeria       { --tint: 127,29,29;  --photo: url('img/fondo-galeria.jpg') }
 #redes         { --tint:  30,58,138; --photo: url('img/fondo-redes.jpg') }
-#vuelve        { --tint: 124,45,18;  --photo: url('img/fondo-experiencias.jpg') }
+#parche        { --tint: 124,45,18;  --photo: url('img/fondo-experiencias.jpg') }
 
 /* Componentes */
 .chips{display:flex; gap:10px; flex-wrap:wrap; list-style:none; padding:0; margin:20px 0 0}
