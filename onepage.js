@@ -47,6 +47,48 @@ const sectionFadeIO = new IntersectionObserver((entries) => {
 
 sections.forEach(s => sectionFadeIO.observe(s));
 
+// Menú móvil: la nav está oculta bajo 820px y se abre con la hamburguesa
+const navToggle = document.getElementById('nav-toggle');
+const mainNav = document.getElementById('main-nav');
+
+if (navToggle && mainNav) {
+  const setNav = (open) => {
+    mainNav.dataset.open = String(open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.setAttribute('aria-label', open ? 'Cerrar menú de navegación' : 'Abrir menú de navegación');
+  };
+
+  setNav(false);
+
+  navToggle.addEventListener('click', () => {
+    setNav(navToggle.getAttribute('aria-expanded') !== 'true');
+  });
+
+  // Al elegir un destino, el menú estorba: se cierra
+  mainNav.addEventListener('click', (e) => {
+    if (e.target.closest('a')) setNav(false);
+  });
+
+  // Escape cierra y devuelve el foco al botón
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navToggle.getAttribute('aria-expanded') === 'true') {
+      setNav(false);
+      navToggle.focus();
+    }
+  });
+
+  // Tocar fuera del panel también cierra
+  document.addEventListener('click', (e) => {
+    if (navToggle.getAttribute('aria-expanded') !== 'true') return;
+    if (!mainNav.contains(e.target) && !navToggle.contains(e.target)) setNav(false);
+  });
+
+  // Si se pasa a escritorio con el menú abierto, se limpia el estado
+  window.matchMedia('(min-width: 821px)').addEventListener('change', (e) => {
+    if (e.matches) setNav(false);
+  });
+}
+
 // Botón "Volver arriba"
 const backToTop = document.querySelector('.back-to-top');
 if (backToTop) {
