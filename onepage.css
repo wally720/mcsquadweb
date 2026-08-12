@@ -31,6 +31,9 @@ body{
 .main-nav{justify-self:center; display:flex; gap:16px; flex-wrap:wrap}
 .main-nav a{color:#dfe9ff; text-decoration:none; font-weight:600; opacity:.9}
 .main-nav a:hover, .main-nav a.active{color:#fff}
+/* En escritorio el Discord del header lo pone .actions. El de dentro de la nav
+   solo aparece en el panel movil, donde .actions esta oculto: si no, salen dos. */
+.main-nav .btn-discord{display:none}
 .actions{justify-self:end}
 .btn{
   display:inline-flex; align-items:center; gap:8px; padding:8px 14px;
@@ -164,6 +167,25 @@ img.avatar{
 }
 .member-facts dd{margin:0 0 12px; font-size:15px; line-height:1.5}
 .member-facts dd:last-child{margin-bottom:0}
+
+/* Redes de cada miembro */
+.member-social{
+  list-style:none; margin:16px 0 0; padding:14px 0 0;
+  display:flex; flex-wrap:wrap; gap:8px;
+  border-top:1px solid rgba(var(--c),.28);
+}
+.member-social a{
+  display:inline-flex; align-items:baseline; gap:6px;
+  padding:7px 12px; border-radius:999px;
+  text-decoration:none; font-size:13px;
+  background:rgba(var(--c),.16);
+  border:1px solid rgba(var(--c),.45);
+  color:rgb(var(--c));
+  transition: background-color .2s ease, transform .2s ease;
+}
+.member-social a:hover{background:rgba(var(--c),.3); transform:translateY(-1px)}
+.member-social strong{font-weight:800}
+.member-social span{opacity:.85}
 
 /* Herramienta destacada (el Launcher) */
 .hero-tool{
@@ -402,7 +424,8 @@ section{scroll-margin-top: calc(var(--header-h) + 16px)}
   }
   .main-nav a{padding:14px 4px; border-bottom:1px solid rgba(255,255,255,.08); font-size:17px}
   .main-nav a:last-of-type{border-bottom:0}
-  .main-nav .btn-discord{margin-top:14px; justify-content:center; padding:14px}
+  /* Aqui si: .actions esta oculto, asi que este es el unico Discord del header */
+  .main-nav .btn-discord{display:inline-flex; margin-top:14px; justify-content:center; padding:14px}
 
   .section{min-height:auto; padding:72px 0}
 

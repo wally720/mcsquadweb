@@ -103,13 +103,18 @@
         </p>
 
         <!--
+          Las cabezas se piden en vivo a mc-heads.net, asi que reflejan el skin actual
+          de cada uno. Si el servicio se cae, el onerror tira del PNG de img/squad/.
+
           "A qué se dedica" y "Qué piensa hacer" son de relleno, puestos con humor
           a la espera de que cada uno escriba el suyo.
         -->
         <div class="grid squad">
           <article class="member member--wally">
             <div class="member-head">
-              <img class="avatar" src="img/squad/wally.png" alt="Skin de Minecraft de wallyenteras" width="64" height="64" />
+              <img class="avatar" src="https://mc-heads.net/avatar/wallyenteras/128"
+                   onerror="this.onerror=null;this.src='img/squad/wally.png'"
+                   alt="Skin de Minecraft de wallyenteras" width="64" height="64" loading="lazy" />
               <div>
                 <h3>Wally</h3>
                 <span class="role">Fundador</span>
@@ -125,11 +130,16 @@
               <dt>Qué piensa hacer</dt>
               <dd>Uno todavía más extremo. Nadie se lo ha pedido.</dd>
             </dl>
+            <ul class="member-social">
+              <li><a href="https://www.youtube.com/@wallyenteras" target="_blank" rel="noopener"><strong>YouTube</strong> <span>@wallyenteras</span></a></li>
+            </ul>
           </article>
 
           <article class="member member--choko">
             <div class="member-head">
-              <img class="avatar" src="img/squad/choko.png" alt="Skin de Minecraft de chokolv3" width="64" height="64" />
+              <img class="avatar" src="https://mc-heads.net/avatar/714b5f43-d02b-4139-9bff-1bccb74f44d7/128"
+                   onerror="this.onerror=null;this.src='img/squad/choko.png'"
+                   alt="Skin de Minecraft de Chokolvl3" width="64" height="64" loading="lazy" />
               <div>
                 <h3>Choko</h3>
                 <span class="role">Fundador</span>
@@ -145,11 +155,16 @@
               <dt>Qué piensa hacer</dt>
               <dd>Sostener Axios MC hasta que vuelva a caber toda la banda.</dd>
             </dl>
+            <ul class="member-social">
+              <li><a href="https://www.twitch.tv/chokolvl3" target="_blank" rel="noopener"><strong>Twitch</strong> <span>chokolvl3</span></a></li>
+            </ul>
           </article>
 
           <article class="member member--markuz">
             <div class="member-head">
-              <img class="avatar" src="img/squad/markuz.png" alt="Skin de Minecraft de Markuz_Diaz" width="64" height="64" />
+              <img class="avatar" src="https://mc-heads.net/avatar/Markuz_Diaz/128"
+                   onerror="this.onerror=null;this.src='img/squad/markuz.png'"
+                   alt="Skin de Minecraft de Markuz_Diaz" width="64" height="64" loading="lazy" />
               <div>
                 <h3>Markuz</h3>
                 <span class="role">Fundador</span>
@@ -165,11 +180,14 @@
               <dt>Qué piensa hacer</dt>
               <dd>Redactar el reglamento del reglamento.</dd>
             </dl>
+            <!-- PENDIENTE: sus redes. Copiar el <ul class="member-social"> de otra tarjeta -->
           </article>
 
           <article class="member member--jonks">
             <div class="member-head">
-              <img class="avatar" src="img/squad/jonks.png" alt="Skin de Minecraft de eljonks" width="64" height="64" />
+              <img class="avatar" src="https://mc-heads.net/avatar/eljonks/128"
+                   onerror="this.onerror=null;this.src='img/squad/jonks.png'"
+                   alt="Skin de Minecraft de eljonks" width="64" height="64" loading="lazy" />
               <div>
                 <h3>Jonks</h3>
                 <span class="role">El cuarto que faltaba</span>
@@ -185,13 +203,9 @@
               <dt>Qué piensa hacer</dt>
               <dd>Una segunda temporada. Esta vez la gente recordará la trama.</dd>
             </dl>
+            <!-- PENDIENTE: sus redes. Copiar el <ul class="member-social"> de otra tarjeta -->
           </article>
         </div>
-
-        <ul class="chips">
-          <li>¿Faltas tú en esta lista?</li>
-          <li>Escríbenos en Discord</li>
-        </ul>
       </div>
     </section>
 

@@ -80,27 +80,37 @@ Cada miembro tiene su color (`.member--wally`, `--markuz`, `--jonks`, `--choko`)
 
 ### Las cabezas de skin
 
-Están en `img/squad/`, descargadas de `minotar.net` y guardadas en el repo para no depender
-de un servicio externo. Los usuarios son:
+Van en dos capas, para que se actualicen solas sin quedar a merced de un servicio ajeno:
 
-| Archivo | Usuario de Minecraft |
+1. El `src` apunta a **`mc-heads.net` en vivo**, así que la web muestra el skin que cada uno
+   tenga puesto en ese momento. Si alguien se cambia el skin, la página lo refleja sola.
+2. El `onerror` cae a un **PNG guardado en `img/squad/`** si el servicio no responde.
+
+| Miembro | Identificador que se pide |
 |---|---|
-| `wally.png` | `wallyenteras` |
-| `choko.png` | `chokolv3` |
-| `markuz.png` | `Markuz_Diaz` |
-| `jonks.png` | `eljonks` |
+| Wally | `wallyenteras` |
+| Choko | UUID `714b5f43-d02b-4139-9bff-1bccb74f44d7` |
+| Markuz | `Markuz_Diaz` |
+| Jonks | `eljonks` |
 
-Para actualizarlas cuando alguien cambie de skin:
+Choko va por UUID porque el usuario que se probó primero (`chokolv3`) no existía. **Los
+UUID son permanentes; los nombres de usuario se pueden cambiar.** Si alguien se cambia el
+nombre, su cabeza dejará de cargar y se quedará en el respaldo: la solución es pasar esa
+tarjeta a UUID.
+
+Para refrescar un respaldo local:
 
 ```bash
-curl -o img/squad/wally.png https://minotar.net/helm/wallyenteras/128.png
+curl -o img/squad/wally.png https://mc-heads.net/avatar/wallyenteras/128
 ```
 
 El CSS les aplica `image-rendering: pixelated`, que es lo que evita que una cabeza de 8×8
 salga borrosa al ampliarla.
 
-> Si el usuario no existe, `minotar` devuelve el Steve por defecto sin dar error. Para
-> detectarlo, compara el md5 del resultado con el de un nombre inventado.
+> ⚠️ **Cuidado al verificar un usuario.** Estos servicios devuelven un skin por defecto, sin
+> dar error, cuando el nombre no existe. Y hay **más de un** skin por defecto: comparar solo
+> contra Steve no basta y da falsos positivos. Compara contra el resultado de un nombre
+> inventado **y** el de un nombre inválido como `0`.
 
 **Si cambias un color:** los `--c` (color vivo) se usan en texto pequeño sobre el fondo
 `--c-deep`. Los tonos medios se quedan en 3,6–4,1:1 y no pasan AA — por eso son claros. Si
