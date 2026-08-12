@@ -81,6 +81,42 @@ a:focus-visible, button:focus-visible{
 .nav-toggle[aria-expanded="true"] .bars::before{top:0; transform:rotate(45deg)}
 .nav-toggle[aria-expanded="true"] .bars::after{top:0; transform:rotate(-45deg)}
 
+/* Portada */
+.hero{
+  min-height: calc(100dvh - var(--header-h));
+  display:grid; place-items:center;
+  padding:48px var(--pad-x) 64px;
+  text-align:center;
+  background:
+    radial-gradient(70% 55% at 50% 38%, rgba(0,224,255,.20), transparent 70%),
+    radial-gradient(60% 50% at 50% 62%, rgba(157,78,221,.22), transparent 70%),
+    #080b14;
+}
+.hero-inner{display:grid; justify-items:center; gap:0}
+.hero-logo{
+  width:min(260px, 52vw); height:auto;
+  filter: drop-shadow(0 0 40px rgba(0,224,255,.35));
+}
+.hero-title{
+  margin:14px 0 0; font-size:clamp(44px,9vw,104px); font-weight:800; letter-spacing:-.02em;
+  background:linear-gradient(90deg,#00e0ff,#9d4edd);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.hero-claim{
+  margin:2px 0 0; font-size:clamp(20px,3.6vw,34px); font-weight:700;
+}
+.hero-sub{
+  margin:16px 0 0; max-width:46ch;
+  font-size:clamp(16px,2.2vw,19px); opacity:.85;
+}
+.hero .btn-xl{margin-top:30px; padding:18px 34px; font-size:19px}
+.hero-scroll{
+  margin-top:38px; display:grid; justify-items:center; gap:4px;
+  color:#9fd1ff; text-decoration:none; font-size:14px; font-weight:600;
+}
+.hero-scroll:hover{color:#cfe6ff}
+.hero-arrow{font-size:20px; line-height:1}
+
 /* Layout principal */
 main{padding-top:var(--header-h)}
 .container{width:min(var(--container), calc(100% - 2*var(--pad-x))); margin-inline:auto}
@@ -297,7 +333,9 @@ img.avatar{
 
 .hero-tool-where{margin:12px 0 0; font-size:14px; opacity:.85}
 
-/* Boton flotante: el Discord siempre a un toque, en cualquier punto de la web */
+/* Boton flotante: el Discord a un toque desde cualquier punto.
+   Oculto mientras la portada esta a la vista, donde repetiria su propio boton.
+   Lo enciende onepage.js al perder de vista .hero. */
 .discord-float{
   position:fixed; right:20px; bottom:20px; z-index:1500;
   display:inline-flex; align-items:center; gap:10px;
@@ -306,7 +344,12 @@ img.avatar{
   text-decoration:none; font-weight:800;
   border:1px solid rgba(255,255,255,.28);
   box-shadow:0 12px 30px rgba(0,0,0,.45);
-  transition: transform .2s ease, box-shadow .2s ease;
+  opacity:0; visibility:hidden; transform:translateY(14px) scale(.94);
+  pointer-events:none;
+  transition: opacity .25s ease, transform .25s ease, visibility .25s, box-shadow .2s ease;
+}
+.discord-float.is-visible{
+  opacity:1; visibility:visible; transform:none; pointer-events:auto;
 }
 .discord-float:hover{transform:translateY(-2px) scale(1.03); box-shadow:0 16px 38px rgba(23,30,90,.6)}
 .discord-float svg{width:22px; height:22px; flex:0 0 auto}
