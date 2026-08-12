@@ -7,7 +7,7 @@ una docena larga de servidores de Minecraft y de Rust.
 La web es una **convocatoria**: su único trabajo es que la gente que estuvo vuelva a caer
 al Discord. Todo lo demás es secundario.
 
-👉 **Discord:** https://discord.com/invite/8uvAN9CTH9
+👉 **Discord:** https://discord.com/invite/rGk6Q2dsDN
 
 ## Cómo verla en local
 
