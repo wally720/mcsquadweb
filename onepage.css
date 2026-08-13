@@ -50,6 +50,12 @@ body{
 .btn-discord:hover{box-shadow:0 0 18px rgba(88,101,242,.6)}
 .btn-lg{padding:14px 26px; font-size:17px}
 
+/* Solo para lectores de pantalla: presente en el arbol, invisible en pantalla */
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+
 /* Foco visible para navegación por teclado */
 a:focus-visible, button:focus-visible{
   outline:3px solid #00e0ff; outline-offset:3px; border-radius:6px;
@@ -293,15 +299,221 @@ img.avatar{
 .tool-card:hover{transform:translateY(-3px); border-color:rgba(255,255,255,.5); background:rgba(0,0,0,.42)}
 .tool-card .go{display:inline-block; margin-top:12px; font-weight:700; color:#7fe6ff}
 
-/* Galería: funciona con y sin fotos */
-.gallery{grid-template-columns: repeat(auto-fit, minmax(220px,1fr))}
-.gallery img{width:100%; height:220px; object-fit:cover; border-radius:12px; border:1px solid rgba(255,255,255,.25)}
-.gallery-empty{
-  margin-top:24px; padding:40px 24px; text-align:center;
-  border:2px dashed rgba(255,255,255,.32); border-radius:16px;
-  background:rgba(0,0,0,.24);
+/* ==========================================================================
+   Galería: rejilla de slots tipo cofre de inventario.
+   El bloque de dentro lo escribe tools/galeria.py; esto es solo el aspecto.
+   Todo se mide en "unidades" de 1 columna x 1 fila: una foto ocupa 1, 2 o 4,
+   nunca una fraccion, y por eso el mosaico tesela sin agujeros. --slot-row
+   esta calculado para que una unidad quede en 3:2 largo.
+   Las esquinas vivas y el bisel hundido son deliberados: es la unica seccion
+   que rompe con el redondeado del resto, y esa es su identidad.
+   ========================================================================== */
+.gal{ --slot-row: clamp(112px, 13.5vw, 200px); }
+
+.gal-bar{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:18px 0 0}
+.gal-bar-label{
+  font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:rgba(255,255,255,.55); margin-right:4px;
 }
-.gallery-empty p{margin:0 auto; max-width:52ch}
+
+/* Filtros sin una linea de JS: radios ocultos y :has() en el contenedor */
+.gal-filters{border:0; padding:0; margin:0; display:flex; flex-wrap:wrap; gap:8px}
+.gal-filters input{position:absolute; opacity:0; width:1px; height:1px}
+.gal-filters label{
+  cursor:pointer; user-select:none;
+  font-size:13.5px; font-weight:600; line-height:1;
+  padding:9px 14px; border-radius:999px;
+  color:rgba(255,255,255,.82);
+  border:1px solid rgba(255,255,255,.24);
+  background:rgba(0,0,0,.3);
+  transition: background-color .18s ease, border-color .18s ease, color .18s ease;
+}
+.gal-filters label:hover{background:rgba(0,0,0,.5); border-color:rgba(255,255,255,.44)}
+.gal-filters input:checked + label{color:#2A0808; background:#FCA5A5; border-color:#FCA5A5}
+.gal-filters input:focus-visible + label{outline:3px solid #00e0ff; outline-offset:3px}
+
+.gal-grid{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  grid-auto-rows:var(--slot-row);
+  grid-auto-flow:dense;
+  gap:10px;
+  margin-top:20px;
+}
+
+/* El slot: bisel hundido de inventario. Sin imagenes, solo box-shadow. */
+.gal-slot{
+  position:relative; margin:0; overflow:hidden;
+  grid-column:span 1; grid-row:span 1;
+  border-radius:3px;
+  background:#160E12;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,.13),
+    inset -2px -2px 0 rgba(0,0,0,.6),
+    0 8px 20px rgba(0,0,0,.34);
+  transition: transform .22s ease, box-shadow .22s ease, opacity .28s ease, filter .28s ease;
+}
+.gal-slot[data-size="wide"]{grid-column:span 2; grid-row:span 1}
+.gal-slot[data-size="tall"]{grid-column:span 1; grid-row:span 2}
+.gal-slot[data-size="big"] {grid-column:span 2; grid-row:span 2}
+
+.gal-slot img{
+  display:block; width:100%; height:100%; object-fit:cover;
+  transition: transform .45s cubic-bezier(.2,.6,.2,1);
+}
+/* Acercarse a la foto la agranda dentro de su marco. El marco no se mueve,
+   asi que el layout no salta, y en reposo la captura se ve entera. */
+@media (hover:hover){
+  .gal-slot:hover img, .gal-slot:focus-within img{transform:scale(1.07)}
+}
+
+/* Boton transparente encima: es lo que hace la foto abrible y enfocable */
+.gal-open{
+  position:absolute; inset:0; width:100%; height:100%;
+  border:0; padding:0; background:transparent; cursor:zoom-in;
+  -webkit-appearance:none; appearance:none;
+}
+.gal-slot:hover, .gal-slot:focus-within{
+  transform:translateY(-3px);
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,.22),
+    inset -2px -2px 0 rgba(0,0,0,.6),
+    0 14px 30px rgba(0,0,0,.5);
+}
+
+/* Etiqueta tipo tooltip de item. Se ajusta al texto en vez de estirarse. */
+.gal-tip{
+  position:absolute; left:8px; bottom:8px;
+  width:max-content; max-width:calc(100% - 16px);
+  display:grid; gap:2px; padding:9px 11px;
+  border:2px solid #4A2170; outline:1px solid #100418;
+  background:rgba(16,4,26,.94);
+  pointer-events:none;
+}
+.gal-tip b{font-size:14px; font-weight:700; color:#F1E4FF; letter-spacing:-.01em; line-height:1.25}
+.gal-tip span{
+  font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:#A98CC9;
+}
+@media (hover:hover){
+  .gal-tip{opacity:0; transform:translateY(8px); transition:opacity .2s ease, transform .2s ease}
+  .gal-slot:hover .gal-tip, .gal-slot:focus-within .gal-tip{opacity:1; transform:none}
+}
+/* Sin hover no hay tooltip que valga, asi que la etiqueta se queda puesta.
+   Pero como recuadro taparia la foto: pasa a ser una franja al pie. */
+@media (hover:none){
+  .gal-tip{
+    left:0; right:0; bottom:0; width:auto; max-width:none;
+    gap:0; padding:26px 10px 8px; border:0; outline:0;
+    background:linear-gradient(to top, rgba(12,3,20,.94) 45%, transparent);
+  }
+  .gal-tip b{font-size:13px; line-height:1.2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .gal-tip span{font-size:9.5px; letter-spacing:.07em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+}
+
+/* Filtrado: en vez de esconder, que descuadraria el mosaico, se apaga */
+.gal:has(#galf-bases:checked)     .gal-slot[data-cat]:not([data-cat~="bases"]),
+.gal:has(#galf-eventos:checked)   .gal-slot[data-cat]:not([data-cat~="eventos"]),
+.gal:has(#galf-rol:checked)       .gal-slot[data-cat]:not([data-cat~="rol"]),
+.gal:has(#galf-desastres:checked) .gal-slot[data-cat]:not([data-cat~="desastres"]){
+  opacity:.16; filter:grayscale(1); transform:scale(.97); pointer-events:none;
+}
+
+/* "Ver mas": la seccion no crece sin limite. Con treinta capturas la rejilla
+   pasa de 2000px; asi se queda en cuatro filas y el resto entra a pedido.
+   El corte cae al final de un bloque, de ahi los dos juegos de huecos. */
+.gal-mas-check{position:absolute; opacity:0; width:1px; height:1px}
+.gal-mas{
+  display:inline-flex; align-items:center; gap:9px; cursor:pointer;
+  margin-top:16px; padding:13px 22px; border-radius:999px;
+  font-size:15px; font-weight:700; color:#fff;
+  border:1px solid rgba(255,255,255,.3); background:rgba(0,0,0,.34);
+  transition: background-color .18s ease, border-color .18s ease;
+}
+.gal-mas:hover{background:rgba(0,0,0,.55); border-color:rgba(255,255,255,.5)}
+.gal-mas span{font-size:12px; opacity:.8}
+.gal-mas-check:focus-visible + .gal-mas{outline:3px solid #00e0ff; outline-offset:3px}
+.gal:not(:has(.gal-mas-check:checked)) .gal-slot--extra,
+.gal:not(:has(.gal-mas-check:checked)) .gal-hole--fin{display:none}
+.gal:has(.gal-mas-check:checked) .gal-hole--corte,
+.gal:has(.gal-mas-check:checked) .gal-mas{display:none}
+
+/* Estado vacio: los huecos tambien son diseno */
+.gal-hole{
+  grid-column:span 1; grid-row:span 1;
+  display:grid; place-items:center;
+  border-radius:3px;
+  background:rgba(0,0,0,.34);
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,.08),
+    inset -2px -2px 0 rgba(0,0,0,.5);
+}
+.gal-hole::after{
+  content:''; width:26px; height:26px;
+  border:2px dashed rgba(255,255,255,.26);
+  border-radius:2px;
+}
+.gal-call{
+  grid-column:span 2; grid-row:span 2;
+  display:grid; align-content:center; justify-items:start; gap:12px;
+  padding:24px; border-radius:3px;
+  background:rgba(0,0,0,.42);
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,.13),
+    inset -2px -2px 0 rgba(0,0,0,.6);
+}
+.gal-call h4{margin:0; font-size:19px}
+.gal-call p{margin:0; font-size:15px; color:rgba(255,255,255,.82)}
+.gal-call a{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:11px 18px; border-radius:999px; text-decoration:none;
+  font-weight:700; font-size:15px; color:#fff;
+  background:linear-gradient(90deg,#5865F2,#4752C4);
+  border:1px solid rgba(255,255,255,.26);
+}
+
+/* Visor: <dialog> nativo, sin libreria */
+.gal-box{
+  width:min(96vw, 1400px); max-width:none;
+  max-height:92dvh; padding:0; border:0; border-radius:6px;
+  background:#0B0710; color:#fff; overflow:visible;
+}
+.gal-box::backdrop{background:rgba(4,2,8,.88)}
+.gal-box img{
+  display:block; width:100%; max-height:78dvh; object-fit:contain;
+  background:#000; border-radius:6px 6px 0 0;
+}
+.gal-box-cap{
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 14px;
+  padding:14px 18px; border-top:1px solid rgba(255,255,255,.12);
+}
+.gal-box-cap b{font-size:16px}
+.gal-box-cap span{
+  font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size:11.5px; letter-spacing:.09em; text-transform:uppercase; color:#A98CC9;
+}
+.gal-box-cap em{
+  margin-left:auto; font-style:normal;
+  font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size:11.5px; color:rgba(255,255,255,.5);
+}
+.gal-nav{
+  position:absolute; top:0; bottom:0; width:64px;
+  display:grid; place-items:center; cursor:pointer;
+  border:0; background:transparent; color:#fff;
+  font-size:34px; line-height:1; opacity:.6;
+  transition:opacity .18s ease;
+}
+.gal-nav:hover{opacity:1}
+.gal-prev{left:0}
+.gal-next{right:0}
+.gal-close{
+  position:absolute; top:-14px; right:-14px; z-index:2;
+  width:40px; height:40px; border-radius:999px; cursor:pointer;
+  border:1px solid rgba(255,255,255,.3); background:#16101E; color:#fff;
+  font-size:17px; line-height:1;
+}
 
 /* Discord: es donde esta centralizado todo, asi que no compite con las demas redes */
 .discord-block{
@@ -410,10 +622,17 @@ img.avatar{
 
     /* Cada tarjeta lleva su propia linea de tiempo, asi que el escalonado sale
        solo del scroll en vez de a base de delays fijos */
-    .member, .tl-item, .card, .hero-tool, .gallery-empty, .chips li{
+    .member, .tl-item, .card, .hero-tool, .chips li{
       animation: pop-in linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 95%;
+    }
+
+    /* Los slots de la galeria entran igual, con su propio recorrido */
+    .gal-slot, .gal-hole, .gal-call{
+      animation: pop-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 92%;
     }
 
     /* El eje de la linea de tiempo se dibuja solo conforme se baja */
@@ -481,6 +700,16 @@ section{scroll-margin-top: calc(var(--header-h) + 16px)}
   .site-footer{padding-bottom:84px}
 }
 
+/* La galeria cambia antes que la nav: a 4 columnas los slots ya son diminutos */
+@media (max-width: 720px){
+  .gal{--slot-row:30vw}
+  .gal-grid{grid-template-columns:repeat(2, 1fr)}
+  .gal-slot[data-size="big"], .gal-slot[data-size="wide"]{grid-column:span 2}
+  .gal-call{grid-column:span 2}
+  .gal-nav{width:48px; font-size:28px}
+  .gal-close{top:6px; right:6px}
+}
+
 /* Accesibilidad: reducir animaciones si el usuario lo prefiere */
 /* Accesibilidad: con animaciones tan marcadas esto deja de ser un detalle. El
    movimiento intenso ligado al scroll produce mareo a bastante gente, asi que
@@ -490,6 +719,9 @@ section{scroll-margin-top: calc(var(--header-h) + 16px)}
   html{scroll-behavior:auto}
   .reveal, .section.fade-init{transition:none; transform:none; opacity:1}
   .btn, .tool-card, .main-nav, .nav-toggle .bars::before, .nav-toggle .bars::after{transition:none}
-  .reveal, .member, .tl-item, .card, .hero-tool, .gallery-empty, .chips li,
+  .reveal, .member, .tl-item, .card, .hero-tool, .chips li,
   .timeline::before, .section h2, body::after{animation:none; transform:none; opacity:1}
+  .gal-slot, .gal-hole, .gal-call, .gal-slot img{animation:none; transform:none; opacity:1}
+  .gal-slot, .gal-slot img, .gal-tip, .gal-filters label, .gal-nav{transition:none}
+  .gal-slot:hover img, .gal-slot:focus-within img{transform:none}
 }

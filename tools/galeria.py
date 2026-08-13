@@ -53,6 +53,20 @@ VISIBLES = 10
 UNIDADES = {"norm": 1, "wide": 2, "tall": 2, "big": 4}
 COLUMNAS = 4
 
+# Con menos de esto no vale la pena la barra de filtros: se filtra con la vista.
+MINIMO_PARA_FILTRAR = 6
+
+# El orden manda en la barra. Solo salen las que tienen fotos.
+CATEGORIAS = [
+    ("bases", "Bases"),
+    ("eventos", "Eventos"),
+    ("rol", "Rol"),
+    ("desastres", "Desastres"),
+]
+
+# Cuántos slots vacíos tiene el cofre cuando todavía no hay ninguna captura.
+HUECOS_VACIA = 8
+
 # Cada bloque suma 8 unidades, o sea 2 filas exactas de 4 columnas. Por eso el
 # mosaico tesela sin agujeros por dentro, y por eso el corte del "ver más"
 # tiene que caer entre bloques y no en cualquier foto.
@@ -218,12 +232,62 @@ def figura(e, tamano, extra, indent):
     )
 
 
+def barra_filtros(entradas, indent):
+    """La barra solo sale si hay bastantes fotos y más de una categoría."""
+    presentes = {c for e in entradas for c in e["categorias"].split()}
+    usadas = [(k, etiqueta) for k, etiqueta in CATEGORIAS if k in presentes]
+    if len(entradas) < MINIMO_PARA_FILTRAR or len(usadas) < 2:
+        return ""
+    i = " " * indent
+    chips = [f'{i}    <input type="radio" name="galf" id="galf-todo" checked />'
+             f'<label for="galf-todo">Todo</label>\n']
+    for k, etiqueta in usadas:
+        chips.append(f'{i}    <input type="radio" name="galf" id="galf-{k}" />'
+                     f'<label for="galf-{k}">{etiqueta}</label>\n')
+    return (
+        f'{i}<div class="gal-bar">\n'
+        f'{i}  <span class="gal-bar-label">Filtrar</span>\n'
+        f'{i}  <fieldset class="gal-filters">\n'
+        f'{i}    <legend class="sr-only">Filtrar capturas por tipo</legend>\n'
+        + "".join(chips) +
+        f'{i}  </fieldset>\n'
+        f'{i}</div>\n\n'
+    )
+
+
+def cofre_vacio(indent):
+    """Lo que se ve mientras no hay ninguna captura subida. Los huecos son
+    parte del diseño: el cofre se ve vacío, no roto."""
+    i = " " * indent
+    mitad = HUECOS_VACIA // 2
+    hueco = f'{i}  <div class="gal-hole"></div>\n'
+    return (
+        f'{i}<div class="gal-grid gal-grid--empty">\n'
+        + hueco * mitad +
+        f'{i}  <div class="gal-call">\n'
+        f'{i}    <h4>El cofre está vacío</h4>\n'
+        f'{i}    <p>\n'
+        f'{i}      Todavía no subimos nada. Si tenés capturas de cualquiera de nuestros\n'
+        f'{i}      servidores, mandalas al Discord y las montamos acá.\n'
+        f'{i}    </p>\n'
+        f'{i}    <a href="https://discord.com/invite/rGk6Q2dsDN" target="_blank" rel="noopener">'
+        f'Mandar capturas al Discord →</a>\n'
+        f'{i}  </div>\n'
+        + hueco * mitad +
+        f'{i}</div>\n'
+    )
+
+
 def construir_html(entradas, indent=12):
-    """Devuelve la rejilla entera: el div, las figuras, los huecos y el botón."""
+    """Devuelve la rejilla entera: filtros, figuras, huecos y botón.
+    Sin entradas devuelve el cofre vacío, que es un estado válido del sitio."""
+    if not entradas:
+        return cofre_vacio(indent), None
+
     tamanos = asignar_tamanos(len(entradas))
     corte = punto_de_corte(tamanos)
     i = " " * indent
-    salida = [f'{i}<div class="gal-grid gal-grid--full">\n']
+    salida = [barra_filtros(entradas, indent), f'{i}<div class="gal-grid gal-grid--full">\n']
 
     for n, (e, t) in enumerate(zip(entradas, tamanos)):
         salida.append(figura(e, t, extra=corte is not None and n >= corte, indent=indent + 2))
@@ -282,15 +346,14 @@ def main():
     if not os.path.isdir(orig_dir):
         os.makedirs(orig_dir, exist_ok=True)
         print(f"Creé {ORIGINALES}/. Tirá ahí las capturas y volvé a correrme.")
-        return 0
 
     stems = sorted(
         os.path.splitext(f)[0] for f in os.listdir(orig_dir)
         if os.path.splitext(f)[1].lower() in (".png", ".jpg", ".jpeg", ".webp")
-    )
+    ) if os.path.isdir(orig_dir) else []
     if not stems:
+        # Se sigue igual: hay que dejar el cofre vacío publicado, no lo de antes
         print(f"No hay capturas en {ORIGINALES}/.")
-        return 0
 
     entradas = leer_lista(lista)
     conocidas = {e["archivo"] for e in entradas}
@@ -309,8 +372,8 @@ def main():
     for h in huerfanas:
         print(f"AVISO  {LISTA} nombra '{h}' pero no hay ningún original con ese nombre.")
 
-    # 3. Convertir
-    if not shutil.which("cwebp") and not args.check:
+    # 3. Convertir. Sin capturas no hace falta cwebp: se sigue de largo.
+    if stems and not shutil.which("cwebp") and not args.check:
         print("\nFalta cwebp. Instalalo y volvé a correrme:")
         print("      Debian/Ubuntu  sudo apt install webp")
         print("      macOS          brew install webp")
@@ -334,16 +397,19 @@ def main():
     incompletas = len([e for e in entradas if not e["titulo"]])
     if incompletas:
         print(f"{incompletas} línea(s) sin título: esas no salen al sitio todavía.")
-    if not listas:
-        print("Ninguna captura completa, no toco el HTML.")
-        return 0
 
+    # Sin capturas completas se publica el cofre vacío, que es un estado
+    # legítimo de la sección: mejor eso que dejar lo de la corrida anterior.
     bloque, corte = construir_html(listas)
     if not splicear(destino, bloque, args.check):
         print(f"{args.destino} ya estaba al día.")
         return 0
 
     verbo = "Actualizaría" if args.check else "Actualicé"
+    if not listas:
+        print(f"{verbo} {args.destino}: sin capturas, queda el cofre vacío.")
+        return 0
+
     visibles = corte if corte is not None else len(listas)
     detalle = f" y {len(listas) - visibles} detrás del botón." if corte is not None else "."
     print(f"{verbo} {args.destino}: {len(listas)} capturas, {visibles} a la vista{detalle}")

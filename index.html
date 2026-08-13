@@ -30,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="onepage.css?v=2" />
+  <link rel="stylesheet" href="onepage.css?v=3" />
 </head>
 <body>
   <header class="site-header" id="top">
@@ -377,30 +377,54 @@
     </section>
 
     <!-- 5. Galería -->
+    <!--
+      Esta sección no se edita a mano: el bloque entre los marcadores lo escribe
+      tools/galeria.py a partir de img/galeria/fotos.txt. Ver el README.
+    -->
     <section id="galeria" class="section">
-      <div class="container reveal">
+      <div class="container reveal gal">
         <h2>Galería</h2>
         <p>
           Las bases, los wipes, los eventos y los desastres. Estamos rescatando las
           capturas de todos estos años.
         </p>
 
-        <!--
-          Para llenar la galería: pon las imágenes en img/galeria/ y reemplaza este
-          bloque .gallery-empty por el .grid.gallery de abajo, con un <img> por foto.
-
-          <div class="grid gallery">
-            <img src="img/galeria/base-canitas.jpg" alt="Nuestra base en Canitas Wipe" loading="lazy" width="600" height="400" />
-          </div>
-        -->
-        <div class="gallery-empty">
-          <p>
-            Todavía no hay nada subido. ¿Tienes screenshots de nuestros servidores?
-            Mándalas al Discord y las montamos acá.
-          </p>
-        </div>
+        <!-- GALERIA:INICIO (lo genera tools/galeria.py, no editar a mano) -->
+            <div class="gal-grid gal-grid--empty">
+              <div class="gal-hole"></div>
+              <div class="gal-hole"></div>
+              <div class="gal-hole"></div>
+              <div class="gal-hole"></div>
+              <div class="gal-call">
+                <h4>El cofre está vacío</h4>
+                <p>
+                  Todavía no subimos nada. Si tenés capturas de cualquiera de nuestros
+                  servidores, mandalas al Discord y las montamos acá.
+                </p>
+                <a href="https://discord.com/invite/rGk6Q2dsDN" target="_blank" rel="noopener">Mandar capturas al Discord →</a>
+              </div>
+              <div class="gal-hole"></div>
+              <div class="gal-hole"></div>
+              <div class="gal-hole"></div>
+              <div class="gal-hole"></div>
+            </div>
+          <!-- GALERIA:FIN -->
       </div>
     </section>
+
+    <!-- El visor de la galería. Uno solo para todas las capturas; onepage.js lo
+         deja quieto si la galería todavía está vacía. -->
+    <dialog class="gal-box" id="gal-box" aria-label="Visor de la captura">
+      <button class="gal-close" type="button" aria-label="Cerrar el visor">✕</button>
+      <img id="gal-box-img" alt="" />
+      <div class="gal-box-cap">
+        <b id="gal-box-title"></b>
+        <span id="gal-box-meta"></span>
+        <em id="gal-box-count"></em>
+      </div>
+      <button class="gal-nav gal-prev" type="button" aria-label="Captura anterior">‹</button>
+      <button class="gal-nav gal-next" type="button" aria-label="Captura siguiente">›</button>
+    </dialog>
 
     <!-- 6. Nuestras Redes -->
     <section id="redes" class="section">
@@ -467,6 +491,6 @@
     <span>Discord</span>
   </a>
 
-  <script src="onepage.js?v=2"></script>
+  <script src="onepage.js?v=3"></script>
 </body>
 </html>

@@ -33,7 +33,8 @@ Y abrir http://localhost:8000
 |---|---|
 | `index.html` | La web. Una sola página, siete secciones |
 | `onepage.css` | Estilos. Los fondos de sección y las animaciones van al final |
-| `onepage.js` | Scroll-reveal, nav activa y menú móvil |
+| `onepage.js` | Scroll-reveal, nav activa, menú móvil y el visor de la galería |
+| `tools/galeria.py` | Arma la galería: convierte las capturas y escribe su bloque en `index.html` |
 | `tele.html` | Teleprompter. Herramienta aparte, enlazada desde *Herramientas* |
 | `micalc.html` | Calculadora de trading. **Huérfana a propósito**, no se enlaza desde ningún lado |
 | `img/` | Fondos de sección, tarjeta social y galería |
@@ -123,19 +124,53 @@ tocas uno, mide el contraste antes de subirlo.
 
 ## Cómo agregar fotos a la galería
 
-1. Mete las imágenes en `img/galeria/`.
-2. En `index.html`, dentro de `<section id="galeria">`, borra el bloque
-   `<div class="gallery-empty">` y descomenta el `<div class="grid gallery">` que está justo
-   encima.
-3. Un `<img>` por foto. El CSS ya las recorta a un grid parejo:
+**El HTML de la galería no se edita a mano.** El bloque entre los marcadores
+`<!-- GALERIA:INICIO -->` y `<!-- GALERIA:FIN -->` de `index.html` lo escribe
+`tools/galeria.py`. Si lo tocas a mano, la próxima corrida se lo lleva por delante.
 
-```html
-<img src="img/galeria/lo-que-sea.jpg" alt="Descripción de la foto"
-     loading="lazy" width="600" height="400" />
+```
+1. Tiras las capturas tal como salen del juego en  img/galeria/originales/
+2. python3 tools/galeria.py
+3. Completas título, servidor, año, categorías y alt en  img/galeria/fotos.txt
+4. python3 tools/galeria.py
 ```
 
-**Comprime antes de subir.** Las fotos van a datos móviles. Como referencia, los siete
-fondos de sección pesan ~500 KB entre todos.
+La primera corrida convierte cada captura a dos WebP y te agrega una línea en blanco por
+foto nueva en `fotos.txt`. La segunda reescribe el bloque. Correrlo de nuevo sin cambios no
+hace nada; `--check` dice qué haría sin escribir.
+
+El script decide el tamaño de cada foto en el mosaico, dónde va el corte del *ver más* y
+cuántos huecos cierran cada estado. Es la parte tediosa y fácil de errar a mano.
+
+Una línea de `fotos.txt` completa:
+
+```
+2023-puerto | El puerto de noche | Canitas Wipe | 2023 | bases | Muelles y edificios iluminados sobre el agua, de noche
+```
+
+El orden del archivo es el orden de la galería: para mover una foto, mueves su línea. Las
+líneas sin título se ignoran, así que una captura a medio documentar no llega al sitio por
+accidente. Sin ninguna captura completa se publica el cofre vacío, que es un estado válido
+de la sección.
+
+**Dos tamaños por foto, y de eso se encarga el script:** una miniatura de 640 px (60–90 KB)
+que es lo que carga la página, y una de 1920 px (200–300 KB) que solo se descarga al abrir
+el visor. Sin esto, doce capturas PNG del juego son 30 MB y en datos móviles la sección no
+abre.
+
+**El alt no es opcional.** Describe lo que se ve, no lo que es: *«Base de piedra con torre
+iluminada sobre un lago, de noche»*, no *«captura1»*.
+
+Lo único que hay que instalar es `cwebp`, del paquete `webp`:
+
+| Sistema | Cómo |
+|---|---|
+| Debian/Ubuntu | `sudo apt install webp` |
+| macOS | `brew install webp` |
+| Windows | [zip oficial de Google](https://developers.google.com/speed/webp/download) |
+
+Los originales de `img/galeria/originales/` no hace falta subirlos al repo: pesan y no se
+publican. Lo que sirve el sitio son los WebP de `img/galeria/`.
 
 ## Deploy
 
