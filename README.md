@@ -139,16 +139,29 @@ La primera corrida convierte cada captura a dos WebP y te agrega una línea en b
 foto nueva en `fotos.txt`. La segunda reescribe el bloque. Correrlo de nuevo sin cambios no
 hace nada; `--check` dice qué haría sin escribir.
 
-El script decide el tamaño de cada foto en el mosaico, dónde va el corte del *ver más* y
-cuántos huecos cierran cada estado. Es la parte tediosa y fácil de errar a mano.
+El script decide el tamaño de cada foto en el mosaico y arma los chips de filtro con los
+años y los servidores que encuentre. Es la parte tediosa y fácil de errar a mano.
 
 Una línea de `fotos.txt` completa:
 
 ```
-2023-puerto | El puerto de noche | Canitas Wipe | 2023 | bases | Muelles y edificios iluminados sobre el agua, de noche
+2023-puerto | El puerto de noche | Canitas Wipe | 2023 | CanitasWipe | Muelles y edificios iluminados sobre el agua, de noche
 ```
 
-El orden del archivo es el orden de la galería: para mover una foto, mueves su línea. Las
+**El campo de categorías es el id del servidor**, y de ahí salen los chips del filtro, tal
+cual lo escribas. La columna `servidor` es el nombre largo que se ve en la etiqueta de la
+foto y en el visor; la categoría es el nombre corto por el que se filtra. Se puede poner
+más de uno separados por espacio, si una captura pertenece a dos.
+
+Los filtros son dos y se combinan: **año** y **servidor**. Cada grupo aparece solo si hay
+más de una opción, y ninguno se escribe a mano.
+
+La galería no crece hacia abajo: crece hacia el costado. En pantalla grande son páginas de
+mosaico que se pasan con las flechas o los puntitos; en el celular es una tira de dos filas
+que se arrastra con el dedo. Con veinte capturas o con doscientas, la sección mide lo mismo.
+
+El orden del archivo es el orden de la galería, pero **invertido**: la última línea es la
+primera foto, para que lo nuevo quede adelante. Para mover una foto, mueves su línea. Las
 líneas sin título se ignoran, así que una captura a medio documentar no llega al sitio por
 accidente. Sin ninguna captura completa se publica el cofre vacío, que es un estado válido
 de la sección.

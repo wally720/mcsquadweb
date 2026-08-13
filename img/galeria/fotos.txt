@@ -3,18 +3,21 @@
 #   archivo | título | servidor | año | categorías | alt
 #
 # archivo      nombre del original sin extensión, tal como está en originales/
-# categorías   bases, eventos, rol o desastres. Se puede poner más de una,
-#              separadas por espacio.
+# categorías   el id interno del servidor (MildcraftV2, PokecraftV2...).
+#              De acá salen los chips de filtro, tal cual lo escribas.
+#              Se puede poner más de uno, separados por espacio.
 # alt          qué se ve en la captura, para quien no la puede ver.
 #              Describe la escena, no el archivo.
 #
 # Las líneas sin título se ignoran: la captura no sale al sitio hasta que
-# la completes. El orden de este archivo es el orden de la galería.
+# la completes. El orden de este archivo es el orden de la galería, pero
+# al revés: la última línea es la primera foto, para que lo nuevo quede
+# adelante. Se filtra por año y por servidor, y los dos chips se combinan.
 #
 # Este archivo lo rellena tools/galeria.py cuando encuentra capturas nuevas
 # en img/galeria/originales/. Ejemplo de cómo queda una línea completa:
 #
-# 2023-puerto | El puerto de noche | Canitas Wipe | 2023 | bases | Muelles y edificios iluminados sobre el agua, de noche
+# 2023-puerto | El puerto de noche | Canitas Wipe | 2023 | CanitasWipe | Muelles y edificios iluminados sobre el agua, de noche
 2024-07-02-brenda-mildcraft1-1 | El balnearo de Brenda | MildcraftV1 | 2024 | MildcraftV1 | Brenda dandose un baño relajante
 2024-07-02-mante-mildcraft1-1 | Mante a pelo | MildcraftV1 | 2024 | MildcraftV1 | Mante montando a Wally a pelo
 2024-08-15-brenda-mildcraft1-2 | Mascota | MildcraftV1 | 2024 | MildcraftV1 | La futura mascota durmiendo
