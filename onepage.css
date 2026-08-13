@@ -543,6 +543,52 @@ img.avatar{
 }
 .tl-cta:hover{text-decoration:underline}
 
+/* CTA principal de AXIOSMC: el boton mas llamativo de la pagina.
+   El brillo que lo recorre y el aura son decorativos, asi que van en
+   pseudoelementos y se apagan con prefers-reduced-motion. */
+.btn-join{
+  position:relative; isolation:isolate;
+  display:inline-flex; align-items:center; justify-content:center;
+  margin-top:16px; padding:16px 42px;
+  border-radius:999px; text-decoration:none;
+  font-weight:800; font-size:18px; letter-spacing:.04em; color:#04231a;
+  background:linear-gradient(115deg,#6ee7b7,#34d399 45%,#00e0ff);
+  box-shadow:0 10px 30px rgba(52,211,153,.35), 0 0 0 1px rgba(255,255,255,.35) inset;
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+/* Aura que respira detras del boton */
+.btn-join::before{
+  content:''; position:absolute; z-index:-1; inset:-6px;
+  border-radius:inherit;
+  background:linear-gradient(115deg,#34d399,#00e0ff,#34d399);
+  filter:blur(14px); opacity:.55;
+}
+/* Destello que cruza el boton de lado a lado */
+.btn-join::after{
+  content:''; position:absolute; inset:0;
+  border-radius:inherit; overflow:hidden;
+  background:linear-gradient(100deg, transparent 35%, rgba(255,255,255,.75) 50%, transparent 65%);
+  background-size:260% 100%; background-position:140% 0;
+  background-repeat:no-repeat;
+  pointer-events:none;
+}
+.btn-join:hover{
+  transform:translateY(-3px) scale(1.03);
+  box-shadow:0 16px 42px rgba(52,211,153,.55), 0 0 0 1px rgba(255,255,255,.5) inset;
+  filter:saturate(1.15);
+}
+.btn-join:active{transform:translateY(-1px) scale(1.01)}
+.btn-join:focus-visible{outline:3px solid #fff; outline-offset:4px}
+.btn-join-label{position:relative; z-index:1}
+
+@media (prefers-reduced-motion: no-preference){
+  .btn-join::before{animation: join-aura 3.2s ease-in-out infinite}
+  .btn-join::after{animation: join-shine 3.2s ease-in-out infinite}
+  .btn-join:hover::before{animation-duration:1.6s}
+}
+@keyframes join-aura { 0%,100%{opacity:.4; transform:scale(.98)} 50%{opacity:.8; transform:scale(1.04)} }
+@keyframes join-shine{ 0%{background-position:140% 0} 55%,100%{background-position:-40% 0} }
+
 .hero-tool-where{margin:12px 0 0; font-size:14px; opacity:.85}
 
 /* Boton flotante: el Discord a un toque desde cualquier punto.
@@ -718,7 +764,8 @@ section{scroll-margin-top: calc(var(--header-h) + 16px)}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   .reveal, .section.fade-init{transition:none; transform:none; opacity:1}
-  .btn, .tool-card, .main-nav, .nav-toggle .bars::before, .nav-toggle .bars::after{transition:none}
+  .btn, .btn-join, .tool-card, .main-nav, .nav-toggle .bars::before, .nav-toggle .bars::after{transition:none}
+  .btn-join::after{display:none}
   .reveal, .member, .tl-item, .card, .hero-tool, .chips li,
   .timeline::before, .section h2, body::after{animation:none; transform:none; opacity:1}
   .gal-slot, .gal-hole, .gal-call, .gal-slot img{animation:none; transform:none; opacity:1}

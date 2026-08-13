@@ -6,7 +6,7 @@
 # categorías   bases, eventos, rol o desastres. Se puede poner más de una,
 #              separadas por espacio.
 # alt          qué se ve en la captura, para quien no la puede ver.
-#              Describí la escena, no el archivo.
+#              Describe la escena, no el archivo.
 #
 # Las líneas sin título se ignoran: la captura no sale al sitio hasta que
 # la completes. El orden de este archivo es el orden de la galería.

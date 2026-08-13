@@ -3,15 +3,15 @@
 
 El flujo es:
 
-  1. Tirás las capturas tal como salen del juego en  img/galeria/originales/
-  2. Corrés  python3 tools/galeria.py
+  1. Pones las capturas tal como salen del juego en  img/galeria/originales/
+  2. Ejecutas  python3 tools/galeria.py
      - convierte cada una a dos WebP (miniatura de 640px y grande de 1920px)
      - agrega a img/galeria/fotos.txt una línea por cada captura nueva,
        con los datos en blanco para que los completes
-  3. Completás título, servidor, año, categorías y alt en fotos.txt
-  4. Volvés a correrlo: reescribe el bloque de la galería en index.html
+  3. Completas título, servidor, año, categorías y alt en fotos.txt
+  4. Lo vuelves a ejecutar: reescribe el bloque de la galería en index.html
 
-Correrlo de nuevo sin cambios no hace nada: solo convierte lo que falta o lo
+Ejecutarlo de nuevo sin cambios no hace nada: solo convierte lo que falta o lo
 que cambió. Las líneas de fotos.txt sin título no salen al sitio, así que una
 captura a medio documentar nunca llega a publicarse.
 
@@ -177,7 +177,7 @@ CABECERA = (
     "# categorías   bases, eventos, rol o desastres. Se puede poner más de una,\n"
     "#              separadas por espacio.\n"
     "# alt          qué se ve en la captura, para quien no la puede ver.\n"
-    "#              Describí la escena, no el archivo.\n"
+    "#              Describe la escena, no el archivo.\n"
     "#\n"
     "# Las líneas sin título se ignoran: la captura no sale al sitio hasta que\n"
     "# la completes. El orden de este archivo es el orden de la galería.\n"
@@ -267,8 +267,8 @@ def cofre_vacio(indent):
         f'{i}  <div class="gal-call">\n'
         f'{i}    <h4>El cofre está vacío</h4>\n'
         f'{i}    <p>\n'
-        f'{i}      Todavía no subimos nada. Si tenés capturas de cualquiera de nuestros\n'
-        f'{i}      servidores, mandalas al Discord y las montamos acá.\n'
+        f'{i}      Todavía no hay nada subido. ¿Tienes capturas de cualquiera de nuestros\n'
+        f'{i}      servidores? Mándalas al Discord y las montamos aquí.\n'
         f'{i}    </p>\n'
         f'{i}    <a href="https://discord.com/invite/rGk6Q2dsDN" target="_blank" rel="noopener">'
         f'Mandar capturas al Discord →</a>\n'
@@ -317,7 +317,7 @@ def splicear(ruta, bloque, check):
     if INICIO not in texto or FIN not in texto:
         raise Aviso(
             f"{os.path.relpath(ruta, RAIZ)} no tiene los marcadores de la galería.\n"
-            f"  Poné estas dos líneas donde va la rejilla, y el bloque de adentro lo escribe este script:\n"
+            f"  Pon estas dos líneas donde va la rejilla, y el bloque de adentro lo escribe este script:\n"
             f"    {INICIO}\n"
             f"    {FIN}"
         )
@@ -345,7 +345,7 @@ def main():
 
     if not os.path.isdir(orig_dir):
         os.makedirs(orig_dir, exist_ok=True)
-        print(f"Creé {ORIGINALES}/. Tirá ahí las capturas y volvé a correrme.")
+        print(f"Creé {ORIGINALES}/. Pon ahí las capturas y vuelve a ejecutarme.")
 
     stems = sorted(
         os.path.splitext(f)[0] for f in os.listdir(orig_dir)
@@ -363,7 +363,7 @@ def main():
     if nuevas:
         if not args.check:
             escribir_lista(lista, entradas, nuevas)
-        print(f"{len(nuevas)} captura(s) nueva(s) en {LISTA}. Completá los datos:")
+        print(f"{len(nuevas)} captura(s) nueva(s) en {LISTA}. Completa los datos:")
         for s in nuevas:
             print(f"      {s}")
 
@@ -374,7 +374,7 @@ def main():
 
     # 3. Convertir. Sin capturas no hace falta cwebp: se sigue de largo.
     if stems and not shutil.which("cwebp") and not args.check:
-        print("\nFalta cwebp. Instalalo y volvé a correrme:")
+        print("\nFalta cwebp. Instálalo y vuelve a ejecutarme:")
         print("      Debian/Ubuntu  sudo apt install webp")
         print("      macOS          brew install webp")
         print("      Windows        https://developers.google.com/speed/webp/download")
