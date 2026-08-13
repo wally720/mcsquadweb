@@ -15,3 +15,30 @@
 # en img/galeria/originales/. Ejemplo de cómo queda una línea completa:
 #
 # 2023-puerto | El puerto de noche | Canitas Wipe | 2023 | bases | Muelles y edificios iluminados sobre el agua, de noche
+2024-07-02-brenda-mildcraft1-1 | El balnearo de Brenda | MildcraftV1 | 2024 | MildcraftV1 | Brenda dandose un baño relajante
+2024-07-02-mante-mildcraft1-1 | Mante a pelo | MildcraftV1 | 2024 | MildcraftV1 | Mante montando a Wally a pelo
+2024-08-15-brenda-mildcraft1-2 | Mascota | MildcraftV1 | 2024 | MildcraftV1 | La futura mascota durmiendo
+2024-08-20-todos-mildcraft1-1 | Fin del mundo | MildcraftV1 | 2024 | MildcraftV1 | Vista hermosa al fin del mundo
+2024-12-02-2paj-salvame3-1 | El Dragon de Akira | SalvamecraftXV3 Especial Navidad | 2024 | SalvamecraftXV3-EN | Dragon de Akira en el spawn
+2024-12-02-voxo-salvame3-2 | Stream de Voxo | SalvamecraftXV3 Especial Navidad | 2024 | SalvamecraftXV3-EN | El Voxo en su mejor pose
+2024-12-02-wally-salvame3-1 | Huyendo de los problemas | SalvamecraftXV3 Especial Navidad | 2024 | SalvamecraftXV3-EN | Wally huye por su vida
+2025-07-01-guiri-Mildcraft2-1 | Casas de animales | MildcraftV2 | 2025 | MildcraftV2 | Guiri y J decidieron hacer casas de animales
+2025-07-01-wally-Mildcraft2-1 | Selfie salvaje de Wally | MildcraftV2 | 2025 | MildcraftV2 | Selfie de Wally al iniciar el servidor
+2025-07-04-rusty-Mildcraft2-1 | Casa de Rusty | MildcraftV2 | 2025 | MildcraftV2 | Una de las tantas excentricidades de Rusty
+2025-07-04-todos-Mildcraft2-2 | Baile de Tiktok | MildcraftV2 | 2025 | MildcraftV2 | Practicando para el tiktok viral
+2025-07-15-admins-Mildcraft2-1 | Admins planeando que bloquear | MildcraftV2 | 2025 | MildcraftV2 | Los admins planenado como quitar las diversion
+2025-07-15-todos-Mildcraft2-1 | Todos regañados contra la pared | MildcraftV2 | 2025 | MildcraftV2 |  Se portan mal, pues se les castiga
+2025-07-29-mante-Mildcraft2-1 | Mante y sus funkos | MildcraftV2 | 2025 | MildcraftV2 | Coleccion de Funkos de Mante
+2025-12-14-voxo-pokecraft2-1 | Casa ilegal Voxo | PokecraftV2 | 2025 | PokecraftV2 | Voxo con su casa ilegalisima de minerales
+2025-12-15-brenda-pokecraft2-1 | Selfie de trios | PokecraftV2 | 2025 | PokecraftV2 | Selfie del trio maravilla
+2025-12-15-wally-pokecraft2-3 | Espectacular Spawn | PokecraftV2 | 2025 | PokecraftV2 |  El Espectacular Spawn del servidor
+2025-12-16-wally-pokecraft2-1 | Vistas desde el aire | PokecraftV2 | 2025 | PokecraftV2 | Las vistas de este servidor divinas
+2025-12-16-wally-pokecraft2-2 | Pokedex completa | PokecraftV2 | 2025 | PokecraftV2 | Alguien los atrapo a todos
+2025-12-27-nn-pokecraft2 | Sin palabras | PokecraftV2 | 2025 | PokecraftV2 | Usen la imaginación por favor
+2026-02-14-Markuz_cocaland | Team abejas | CocaLandV2 | 2026 | CocaLandV2 | Pica como abeja vuela como mariposa
+2026-02-22-Wally-Cocaland-2 | Nuevos shadders | CocaLandV2 | 2026 | CocaLandV2 | Vista panoramica del paisaje
+2026-03-01-Evo-Cocaland-1 | Casa de Evo | CocaLandV2 | 2026 | CocaLandV2 | Sus 2 arboles son sus 2 pilares
+2026-03-01-Wally-Cocaland-1 | Aldea de Wally | CocaLandV2 | 2026 | CocaLandV2 | Nunca salio de su aldea
+2026-03-21-Arrow-Cocaland-1 | Casa de Arrow | CocaLandV2 | 2026 | CocaLandV2 | Arrow y Daku construyeron esto, ignoren la abeja
+2026-03-21-Daku-Cocaland-1 | Aldea de Daku | CocaLandV2 | 2026 | CocaLandV2 | La aldea escondida entre las hojas
+2026-03-21-Daku-Cocaland-2 | Otra aldea | CocaLandV2 | 2026 | CocaLandV2 | Otra vista a la aldea. 

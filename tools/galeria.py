@@ -121,15 +121,27 @@ def medidas(ruta):
 
 
 def convertir(origen, destino, ancho, calidad, check):
-    """Llama a cwebp. Salta si el destino ya está y es más nuevo que el origen."""
+    """Llama a cwebp. Devuelve 'saltada' si el destino ya está al día, 'ok' si
+    la convirtió, o el motivo del fallo. No revienta: una captura rota no puede
+    llevarse por delante a las demás."""
     if os.path.exists(destino) and os.path.getmtime(destino) >= os.path.getmtime(origen):
-        return False
+        return "saltada", ""
     cmd = ["cwebp", "-quiet", "-q", str(calidad), "-resize", str(ancho), "0", origen, "-o", destino]
     if check:
         print("      " + " ".join(cmd))
-        return True
-    subprocess.run(cmd, check=True)
-    return True
+        return "ok", ""
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True)
+    except OSError as e:
+        return "fallo", str(e)
+    if r.returncode != 0:
+        # cwebp puede dejar un destino a medio escribir: si queda, la próxima
+        # corrida lo daría por bueno y el sitio serviría un archivo corrupto.
+        if os.path.exists(destino):
+            os.remove(destino)
+        motivo = (r.stderr or r.stdout or "").strip().splitlines()
+        return "fallo", (motivo[-1] if motivo else f"cwebp terminó con código {r.returncode}")
+    return "ok", ""
 
 
 def asignar_tamanos(cuantas):
@@ -380,20 +392,37 @@ def main():
         print("      Windows        https://developers.google.com/speed/webp/download")
         return 1
 
-    convertidas = 0
+    convertidas, fallidas = 0, {}
     for f in sorted(os.listdir(orig_dir)):
         stem, ext = os.path.splitext(f)
         if ext.lower() not in (".png", ".jpg", ".jpeg", ".webp"):
             continue
         origen = os.path.join(orig_dir, f)
-        if convertir(origen, os.path.join(RAIZ, SALIDA, f"{stem}-thumb.webp"), ANCHO_MINI, CALIDAD_MINI, args.check):
-            convertidas += 1
-        if convertir(origen, os.path.join(RAIZ, SALIDA, f"{stem}.webp"), ANCHO_FULL, CALIDAD_FULL, args.check):
-            convertidas += 1
+        for nombre, ancho, calidad in ((f"{stem}-thumb.webp", ANCHO_MINI, CALIDAD_MINI),
+                                       (f"{stem}.webp", ANCHO_FULL, CALIDAD_FULL)):
+            estado, motivo = convertir(origen, os.path.join(RAIZ, SALIDA, nombre), ancho, calidad, args.check)
+            if estado == "ok":
+                convertidas += 1
+            elif estado == "fallo":
+                fallidas.setdefault(stem, motivo)
     print(f"{convertidas} archivo(s) convertido(s)." if convertidas else "Nada que convertir.")
 
-    # 4. Reescribir el HTML, solo con las que están completas
-    listas = [e for e in entradas if e["titulo"] and e["archivo"] in stems]
+    if fallidas:
+        print(f"\nNo pude convertir {len(fallidas)} captura(s):")
+        for stem, motivo in fallidas.items():
+            print(f"      {stem}: {motivo}")
+        print("\nSi el error habla de una librería que falta (libtiff, libpng, libjpeg),")
+        print("cwebp está instalado pero roto, casi siempre porque una dependencia se")
+        print("actualizó por debajo. Se arregla reinstalándolo:")
+        print("      macOS          brew reinstall webp")
+        print("      Debian/Ubuntu  sudo apt install --reinstall webp")
+        print("\nLas demás capturas siguen su camino; estas se quedan fuera del sitio")
+        print("hasta que la conversión funcione.")
+
+    # 4. Reescribir el HTML, solo con las que están completas y convertidas.
+    #    Publicar una cuya conversión falló dejaría un hueco roto en la galería.
+    listas = [e for e in entradas if e["titulo"] and e["archivo"] in stems
+              and (args.check or os.path.exists(os.path.join(RAIZ, SALIDA, f"{e['archivo']}-thumb.webp")))]
     incompletas = len([e for e in entradas if not e["titulo"]])
     if incompletas:
         print(f"{incompletas} línea(s) sin título: esas no salen al sitio todavía.")
