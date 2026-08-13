@@ -181,8 +181,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
 
 .gal-slot img{
   display:block; width:100%; height:100%; object-fit:cover;
-  /* El 1.14 es el margen que se come el parallax: sin él se verían los bordes */
-  transform:scale(1.14);
+  transition:transform .45s cubic-bezier(.2,.6,.2,1);
+}
+/* Acercarse a la foto la agranda dentro de su marco. El marco no se mueve,
+   así que el layout no salta, y en reposo la captura se ve entera. */
+@media (hover:hover){
+  .gal-slot:hover img, .gal-slot:focus-within img{transform:scale(1.07)}
 }
 
 /* Botón transparente encima: es lo que hace la foto abrible y enfocable */
@@ -343,11 +347,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
   from{opacity:0; transform:translateY(34px) scale(.9)}
   to  {opacity:1; transform:none}
 }
-@keyframes gal-pan{
-  from{transform:translateY(-5%) scale(1.14)}
-  to  {transform:translateY(5%)  scale(1.14)}
-}
-
 @supports (animation-timeline: view()){
   @media (prefers-reduced-motion: no-preference){
     /* Cada slot lleva su propia línea de tiempo: el escalonado sale del scroll */
@@ -355,20 +354,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
       animation:gal-place linear both;
       animation-timeline:view();
       animation-range:entry 0% entry 92%;
-    }
-    /* La foto se mueve dentro de su marco: profundidad sin tocar el layout.
-       Ojo con esto: view() se mide contra el contenedor de scroll más cercano,
-       y .gal-slot tiene overflow:hidden, que en CSS ya lo convierte en uno.
-       Puesto sobre la <img>, view() medía el marco contra sí mismo — que no
-       scrollea nunca — y el progreso quedaba clavado en el medio: la animación
-       corría, pero el transform no se movía. La línea de tiempo hay que
-       declararla en el slot, que sí cuelga del documento, y que la foto la
-       tome por nombre. */
-    .gal-slot{ view-timeline-name: --gal-slot; }
-    .gal-slot img{
-      animation:gal-pan linear both;
-      animation-timeline: --gal-slot;
-      animation-range:cover;
     }
   }
 }
@@ -384,8 +369,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
 
 @media (prefers-reduced-motion: reduce){
   .gal-slot, .gal-hole, .gal-call, .gal-slot img{animation:none; transform:none; opacity:1}
-  .gal-slot img{transform:scale(1.14)}
-  .gal-slot, .gal-tip, .gal-filters label, .gal-nav{transition:none}
+  .gal-slot, .gal-slot img, .gal-tip, .gal-filters label, .gal-nav{transition:none}
+  .gal-slot:hover img, .gal-slot:focus-within img{transform:none}
 }
 
 /* ==========================================================================
@@ -724,9 +709,13 @@ pre code{color:inherit; font-size:inherit}
         <h2>Seis efectos, cinco sin JavaScript</h2>
         <p>
           Todo anima <code>transform</code> y <code>opacity</code> nada más, como manda el
-          README. El movimiento va colgado del scroll con <code>animation-timeline: view()</code>,
-          que es lo que ya usa el resto del sitio, así que corre en el compositor y no toca
-          el hilo principal.
+          README, así que corre en el compositor y no toca el hilo principal. La entrada de
+          los slots va colgada del scroll con <code>animation-timeline: view()</code>, igual
+          que el resto del sitio; lo demás reacciona a lo que hacés.
+        </p>
+        <p style="margin-top:12px">
+          Eran siete. Saqué uno — el parallax dentro del marco — porque no se veía y encima
+          obligaba a recortar todas las fotos. Está contado abajo, en la ficha que ocupaba.
         </p>
       </div>
 
@@ -741,20 +730,17 @@ pre code{color:inherit; font-size:inherit}
           <span class="fx-cost">CSS</span>
         </div>
         <div class="fx-item">
-          <h4>Parallax dentro del marco</h4>
+          <h4>Zoom al acercarse</h4>
           <p>
-            La foto va un 14% más grande que su slot y se desplaza de −5% a +5% mientras la
-            sección cruza la pantalla. Es lo que le da profundidad al mosaico. El marco no
-            se mueve, así que el layout nunca salta.
+            Al pasar el mouse por encima, la foto crece un 7% dentro de su marco. El marco
+            no se mueve, así que el layout no salta, y en reposo la captura se ve entera.
+            Es la reacción que uno espera de una foto: pasás por arriba y responde.
           </p>
           <p>
-            Tiene una trampa que costó encontrar: <code>view()</code> se mide contra el
-            contenedor de scroll más cercano, y <code>overflow:hidden</code> ya convierte a
-            un elemento en uno. Puesto sobre la foto, medía el marco contra sí mismo — que
-            no scrollea nunca — y el progreso se quedaba clavado a la mitad. La animación
-            corría, pero el <code>transform</code> no se movía. La línea de tiempo hay que
-            declararla con <code>view-timeline-name</code> en el slot, que sí cuelga del
-            documento, y que la foto la tome por nombre.
+            Acá había un parallax ligado al scroll, y lo saqué. Recorría 17 píxeles a lo
+            largo de dos pantallas de scroll — invisible — y para tener margen obligaba a
+            que cada foto viviera al 114%, recortando 21 píxeles de la captura de forma
+            permanente. Costaba más de lo que daba.
           </p>
           <span class="fx-cost">CSS</span>
         </div>
