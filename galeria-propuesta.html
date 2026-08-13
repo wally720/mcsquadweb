@@ -356,10 +356,18 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
       animation-timeline:view();
       animation-range:entry 0% entry 92%;
     }
-    /* La foto se mueve dentro de su marco: profundidad sin tocar el layout */
+    /* La foto se mueve dentro de su marco: profundidad sin tocar el layout.
+       Ojo con esto: view() se mide contra el contenedor de scroll más cercano,
+       y .gal-slot tiene overflow:hidden, que en CSS ya lo convierte en uno.
+       Puesto sobre la <img>, view() medía el marco contra sí mismo — que no
+       scrollea nunca — y el progreso quedaba clavado en el medio: la animación
+       corría, pero el transform no se movía. La línea de tiempo hay que
+       declararla en el slot, que sí cuelga del documento, y que la foto la
+       tome por nombre. */
+    .gal-slot{ view-timeline-name: --gal-slot; }
     .gal-slot img{
       animation:gal-pan linear both;
-      animation-timeline:view();
+      animation-timeline: --gal-slot;
       animation-range:cover;
     }
   }
@@ -388,14 +396,18 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
    script, así que se amplían sin interpolar. Con fotos reales esto NO va. */
 .gal-slot img, .gal-box img{image-rendering:pixelated}
 
-/* --- El marco del demo: reproduce la sección real del sitio --------------- */
+/* --- El marco del demo: reproduce la sección real del sitio ---------------
+   Sin overflow:hidden acá, y a propósito: haría de este marco el contenedor
+   de scroll de todo lo de adentro, y las animaciones ligadas al scroll de la
+   galería se congelarían. Las esquinas las redondean los hijos. */
 .demo{
-  border:1px solid var(--line); border-radius:10px; overflow:hidden;
+  border:1px solid var(--line); border-radius:10px;
   background:var(--bg-2);
 }
 .demo-bar{
   display:flex; flex-wrap:wrap; align-items:center; gap:10px;
   padding:12px 16px; border-bottom:1px solid var(--line);
+  border-radius:9px 9px 0 0;
   background:rgba(255,255,255,.025);
 }
 .demo-bar .mono{color:var(--ink-2); margin-right:auto}
@@ -412,6 +424,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
 /* Mismo velo tintado y misma foto de fondo que #galeria en el sitio */
 .demo-stage{
   padding:clamp(26px,4vw,46px);
+  border-radius:0 0 9px 9px;
   --tint:127,29,29;
   background-color:rgb(var(--tint));
   background-image:
@@ -733,6 +746,15 @@ pre code{color:inherit; font-size:inherit}
             La foto va un 14% más grande que su slot y se desplaza de −5% a +5% mientras la
             sección cruza la pantalla. Es lo que le da profundidad al mosaico. El marco no
             se mueve, así que el layout nunca salta.
+          </p>
+          <p>
+            Tiene una trampa que costó encontrar: <code>view()</code> se mide contra el
+            contenedor de scroll más cercano, y <code>overflow:hidden</code> ya convierte a
+            un elemento en uno. Puesto sobre la foto, medía el marco contra sí mismo — que
+            no scrollea nunca — y el progreso se quedaba clavado a la mitad. La animación
+            corría, pero el <code>transform</code> no se movía. La línea de tiempo hay que
+            declararla con <code>view-timeline-name</code> en el slot, que sí cuelga del
+            documento, y que la foto la tome por nombre.
           </p>
           <span class="fx-cost">CSS</span>
         </div>
