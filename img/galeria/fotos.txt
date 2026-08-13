@@ -1,0 +1,17 @@
+# Una línea por captura. Los campos van separados por |
+#
+#   archivo | título | servidor | año | categorías | alt
+#
+# archivo      nombre del original sin extensión, tal como está en originales/
+# categorías   bases, eventos, rol o desastres. Se puede poner más de una,
+#              separadas por espacio.
+# alt          qué se ve en la captura, para quien no la puede ver.
+#              Describe la escena, no el archivo.
+#
+# Las líneas sin título se ignoran: la captura no sale al sitio hasta que
+# la completes. El orden de este archivo es el orden de la galería.
+#
+# Este archivo lo rellena tools/galeria.py cuando encuentra capturas nuevas
+# en img/galeria/originales/. Ejemplo de cómo queda una línea completa:
+#
+# 2023-puerto | El puerto de noche | Canitas Wipe | 2023 | bases | Muelles y edificios iluminados sobre el agua, de noche

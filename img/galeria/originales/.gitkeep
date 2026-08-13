@@ -1,0 +1,5 @@
+Aquí van las capturas tal como salen del juego, sin tocar ni redimensionar.
+Después: python3 tools/galeria.py
+
+Lo de esta carpeta no se publica: el script deja las versiones convertidas
+en img/galeria/. Los originales pesados no hace falta subirlos al repo.

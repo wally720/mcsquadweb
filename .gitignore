@@ -54,3 +54,12 @@ Desktop.ini
 *.orig
 *.rej
 
+
+# Python
+__pycache__/
+*.pyc
+
+# Los originales de la galeria pesan y no se publican: el sitio sirve los
+# WebP que deja tools/galeria.py en img/galeria/
+img/galeria/originales/*
+!img/galeria/originales/.gitkeep
