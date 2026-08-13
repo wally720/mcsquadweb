@@ -238,6 +238,31 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
   opacity:.16; filter:grayscale(1); transform:scale(.97); pointer-events:none;
 }
 
+/* --- "Ver más": la sección no crece sin límite ----------------------------
+   Con 30 fotos la rejilla mide más de 2000px y se come tres pantallas. Así
+   solo se ven las primeras y el resto entra a pedido. El corte cae siempre al
+   final de un bloque, así que ninguno de los dos estados queda dentado. */
+.gal-mas-check{position:absolute; opacity:0; width:1px; height:1px}
+.gal-mas{
+  display:inline-flex; align-items:center; gap:9px; cursor:pointer;
+  margin-top:16px; padding:13px 22px; border-radius:999px;
+  font-size:15px; font-weight:700; color:#fff;
+  border:1px solid rgba(255,255,255,.3); background:rgba(0,0,0,.34);
+  transition:background-color .18s ease, border-color .18s ease;
+}
+.gal-mas:hover{background:rgba(0,0,0,.55); border-color:rgba(255,255,255,.5)}
+.gal-mas span{font-size:12px; opacity:.8}
+.gal-mas-check:focus-visible + .gal-mas{outline:2px solid var(--cy); outline-offset:3px}
+
+/* Plegado: no se ven las de más allá del corte, ni los huecos del final */
+.gal:not(:has(.gal-mas-check:checked)) .gal-slot--extra,
+.gal:not(:has(.gal-mas-check:checked)) .gal-hole--fin{display:none}
+/* Desplegado: sobran los huecos que cerraban la fila del corte, y el botón */
+.gal:has(.gal-mas-check:checked) .gal-hole--corte,
+.gal:has(.gal-mas-check:checked) .gal-mas{display:none}
+/* En estado vacío no hay nada que desplegar */
+.gal[data-state="empty"] .gal-mas{display:none}
+
 /* --- Estado vacío: los huecos también son diseño -------------------------- */
 .gal-grid--empty{display:none}
 .gal[data-state="empty"] .gal-grid--full{display:none}
@@ -480,6 +505,7 @@ pre code{color:inherit; font-size:inherit}
       <span class="tag">Sin build</span>
       <span class="tag">~45 líneas de JS</span>
       <span class="tag">Funciona vacía</span>
+      <span class="tag">Se arma sola</span>
     </div>
     <div class="notice">
       <span class="notice-mark">OJO</span>
@@ -534,61 +560,115 @@ pre code{color:inherit; font-size:inherit}
             </div>
 
             <div class="gal-grid gal-grid--full">
-
-              <figure class="gal-slot" data-size="big" data-cat="bases">
-                <img src="img/galeria/_demo/spawn.png" alt="Edificio de piedra clara con torre alta junto al spawn, de día" loading="lazy" width="636" height="360" />
+              <figure class="gal-slot" data-cat="bases" data-size="big">
+                <img src="img/galeria/_demo/spawn.png"
+                     alt="Edificio de piedra clara con torre alta junto al spawn, de dia"
+                     loading="lazy" width="636" height="360" />
                 <figcaption class="gal-tip"><b>La base del spawn</b><span>Axios MC · 2025</span></figcaption>
                 <button class="gal-open" type="button" aria-label="Ampliar: La base del spawn"></button>
               </figure>
-
-              <figure class="gal-slot" data-cat="rol">
-                <img src="img/galeria/_demo/bandidos.png" alt="Pueblo de casas de madera en el desierto al atardecer" loading="lazy" width="636" height="360" />
-                <figcaption class="gal-tip"><b>El pueblo de Bandidos</b><span>Bandidos · 2022</span></figcaption>
-                <button class="gal-open" type="button" aria-label="Ampliar: El pueblo de Bandidos"></button>
+              <figure class="gal-slot" data-cat="eventos">
+                <img src="img/galeria/_demo/cokaland.png"
+                     alt="Puestos de madera alineados bajo un cielo violeta de anochecer"
+                     loading="lazy" width="636" height="360" />
+                <figcaption class="gal-tip"><b>Feria de primavera</b><span>Cokaland · 2025</span></figcaption>
+                <button class="gal-open" type="button" aria-label="Ampliar: Feria de primavera"></button>
               </figure>
-
               <figure class="gal-slot" data-cat="desastres">
-                <img src="img/galeria/_demo/almacen.png" alt="Muros derruidos y una columna de humo bajo un cielo gris" loading="lazy" width="636" height="360" />
-                <figcaption class="gal-tip"><b>Lo que quedó del almacén</b><span>MildCraft · 2023</span></figcaption>
-                <button class="gal-open" type="button" aria-label="Ampliar: Lo que quedó del almacén"></button>
+                <img src="img/galeria/_demo/almacen.png"
+                     alt="Muros derruidos y una columna de humo bajo un cielo gris"
+                     loading="lazy" width="636" height="360" />
+                <figcaption class="gal-tip"><b>Lo que quedo del almacen</b><span>MildCraft · 2023</span></figcaption>
+                <button class="gal-open" type="button" aria-label="Ampliar: Lo que quedo del almacen"></button>
               </figure>
-
-              <figure class="gal-slot" data-size="wide" data-cat="eventos">
-                <img src="img/galeria/_demo/wipe.png" alt="Torres iluminadas recortadas contra un cielo de anochecer con estrellas" loading="lazy" width="636" height="360" />
+              <figure class="gal-slot" data-cat="eventos" data-size="wide">
+                <img src="img/galeria/_demo/wipe.png"
+                     alt="Torres iluminadas recortadas contra un cielo de anochecer con estrellas"
+                     loading="lazy" width="636" height="360" />
                 <figcaption class="gal-tip"><b>Wipe de aniversario</b><span>Canitas Wipe · 2023</span></figcaption>
                 <button class="gal-open" type="button" aria-label="Ampliar: Wipe de aniversario"></button>
               </figure>
-
+              <figure class="gal-slot" data-cat="rol eventos" data-size="tall">
+                <img src="img/galeria/_demo/silence.png"
+                     alt="Bosque de noche con luna llena, estrellas y dos antorchas encendidas"
+                     loading="lazy" width="360" height="636" />
+                <figcaption class="gal-tip"><b>La noche larga</b><span>The Silence · 2022</span></figcaption>
+                <button class="gal-open" type="button" aria-label="Ampliar: La noche larga"></button>
+              </figure>
               <figure class="gal-slot" data-cat="bases">
-                <img src="img/galeria/_demo/granja.png" alt="Estructura de piedra con antorchas y un estanque al lado, con cielo nublado" loading="lazy" width="636" height="360" />
+                <img src="img/galeria/_demo/granja.png"
+                     alt="Estructura de piedra con antorchas y un estanque al lado, con cielo nublado"
+                     loading="lazy" width="636" height="360" />
                 <figcaption class="gal-tip"><b>Granja de hierro</b><span>SalvamecraftX · 2021</span></figcaption>
                 <button class="gal-open" type="button" aria-label="Ampliar: Granja de hierro"></button>
               </figure>
-
-              <figure class="gal-slot" data-size="tall" data-cat="rol eventos">
-                <img src="img/galeria/_demo/silence.png" alt="Bosque de noche con luna llena, estrellas y dos antorchas encendidas" loading="lazy" width="360" height="636" />
-                <figcaption class="gal-tip"><b>La noche de The Silence</b><span>The Silence · 2022</span></figcaption>
-                <button class="gal-open" type="button" aria-label="Ampliar: La noche de The Silence"></button>
-              </figure>
-
               <figure class="gal-slot" data-cat="desastres">
-                <img src="img/galeria/_demo/lava.png" alt="Colada de lava desbordada con chispas, cielo rojo de fondo" loading="lazy" width="636" height="360" />
+                <img src="img/galeria/_demo/lava.png"
+                     alt="Colada de lava desbordada con chispas, cielo rojo de fondo"
+                     loading="lazy" width="636" height="360" />
                 <figcaption class="gal-tip"><b>El incidente del lava cast</b><span>Los Extremos de Wally · 2022</span></figcaption>
                 <button class="gal-open" type="button" aria-label="Ampliar: El incidente del lava cast"></button>
               </figure>
-
-              <figure class="gal-slot" data-size="wide" data-cat="eventos">
-                <img src="img/galeria/_demo/squad.png" alt="Cuatro personajes de colores parados en una llanura al atardecer" loading="lazy" width="636" height="360" />
+              <figure class="gal-slot" data-cat="eventos">
+                <img src="img/galeria/_demo/squad.png"
+                     alt="Cuatro personajes de colores parados en una llanura al atardecer"
+                     loading="lazy" width="636" height="360" />
                 <figcaption class="gal-tip"><b>Foto de squad completa</b><span>Cokaland · 2024</span></figcaption>
                 <button class="gal-open" type="button" aria-label="Ampliar: Foto de squad completa"></button>
               </figure>
-
-              <!-- La cola de la rejilla se cierra con huecos: nunca queda un
-                   borde dentado, y el cofre sigue pidiendo que lo llenen -->
-              <div class="gal-hole"></div>
-              <div class="gal-hole"></div>
-
+              <figure class="gal-slot" data-cat="rol">
+                <img src="img/galeria/_demo/bandidos.png"
+                     alt="Casas de madera a los lados de la calle principal, en el desierto al atardecer"
+                     loading="lazy" width="636" height="360" />
+                <figcaption class="gal-tip"><b>El pueblo</b><span>Bandidos · 2022</span></figcaption>
+                <button class="gal-open" type="button" aria-label="Ampliar: El pueblo"></button>
+              </figure>
+              <figure class="gal-slot" data-cat="bases" data-size="wide">
+                <img src="img/galeria/_demo/puerto.png"
+                     alt="Muelles y edificios iluminados sobre el agua, de noche"
+                     loading="lazy" width="636" height="360" />
+                <figcaption class="gal-tip"><b>El puerto de noche</b><span>Canitas Wipe · 2023</span></figcaption>
+                <button class="gal-open" type="button" aria-label="Ampliar: El puerto de noche"></button>
+              </figure>
+              <figure class="gal-slot gal-slot--extra" data-cat="bases" data-size="wide">
+                <img src="img/galeria/_demo/mildcraft.png"
+                     alt="Conjunto de casas de piedra con una torre, con luz dorada de manana"
+                     loading="lazy" width="636" height="360" />
+                <figcaption class="gal-tip"><b>Vista del pueblo viejo</b><span>MildCraft · 2022</span></figcaption>
+                <button class="gal-open" type="button" aria-label="Ampliar: Vista del pueblo viejo"></button>
+              </figure>
+              <figure class="gal-slot gal-slot--extra" data-cat="bases" data-size="wide">
+                <img src="img/galeria/_demo/granero.png"
+                     alt="Construccion baja y larga en una llanura, con cielo encapotado"
+                     loading="lazy" width="636" height="360" />
+                <figcaption class="gal-tip"><b>El granero comunitario</b><span>MildCraft · 2024</span></figcaption>
+                <button class="gal-open" type="button" aria-label="Ampliar: El granero comunitario"></button>
+              </figure>
+              <figure class="gal-slot gal-slot--extra" data-cat="bases" data-size="wide">
+                <img src="img/galeria/_demo/torre.png"
+                     alt="Construccion de piedra con antorchas encendidas, con luz calida de tarde"
+                     loading="lazy" width="636" height="360" />
+                <figcaption class="gal-tip"><b>La torre del reloj</b><span>Cokaland · 2024</span></figcaption>
+                <button class="gal-open" type="button" aria-label="Ampliar: La torre del reloj"></button>
+              </figure>
+              <figure class="gal-slot gal-slot--extra" data-cat="desastres">
+                <img src="img/galeria/_demo/cueva.png"
+                     alt="Galeria de roca oscura con lava corriendo, todo tenido de violeta"
+                     loading="lazy" width="636" height="360" />
+                <figcaption class="gal-tip"><b>Bajando al nether</b><span>Los Extremos de Wally · 2023</span></figcaption>
+                <button class="gal-open" type="button" aria-label="Ampliar: Bajando al nether"></button>
+              </figure>
+              <figure class="gal-slot gal-slot--extra" data-cat="rol">
+                <img src="img/galeria/_demo/bosque.png"
+                     alt="Sendero entre arboles oscuros iluminado por antorchas, de noche"
+                     loading="lazy" width="360" height="636" />
+                <figcaption class="gal-tip"><b>Camino al templo</b><span>The Silence · 2022</span></figcaption>
+                <button class="gal-open" type="button" aria-label="Ampliar: Camino al templo"></button>
+              </figure>
             </div>
+
+            <input type="checkbox" id="gal-mas" class="gal-mas-check" />
+            <label class="gal-mas" for="gal-mas">Ver las 5 restantes<span aria-hidden="true">▾</span></label>
 
             <!-- El mismo componente cuando todavía no hay nada subido -->
             <div class="gal-grid gal-grid--empty">
@@ -615,7 +695,8 @@ pre code{color:inherit; font-size:inherit}
           <p class="demo-hint">
             Bajá y subí despacio: cada foto se mueve dentro de su marco. Pasá el mouse por
             encima para ver la etiqueta. Hacé clic para abrir el visor — en el celular,
-            deslizá con el dedo.
+            deslizá con el dedo. Son quince capturas, pero solo se ven diez: el resto entra
+            con el botón.
           </p>
         </div>
       </div>
@@ -695,6 +776,165 @@ pre code{color:inherit; font-size:inherit}
     </div>
   </section>
 
+  <!-- ===================== CUANTO CRECE ===================== -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Cuando haya muchas</p>
+        <h2>La sección no crece sin freno</h2>
+        <p>
+          Sin ningún control, treinta capturas serían trece filas: más de dos mil píxeles
+          de alto, casi tres pantallas de scroll solo de galería, con la de Redes empujada
+          hasta el fondo. Por eso hay un corte.
+        </p>
+      </div>
+
+      <div class="tbl-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Capturas</th><th class="num">Filas</th><th class="num">Alto de la rejilla</th>
+              <th>Con el corte puesto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="num">10</td><td class="num">4</td><td class="num">~720 px</td><td>No hace falta: entran todas</td></tr>
+            <tr><td class="num">15</td><td class="num">6</td><td class="num">~1090 px</td><td><b>~720 px</b> y un botón</td></tr>
+            <tr><td class="num">30</td><td class="num">13</td><td class="num">~2370 px</td><td><b>~720 px</b> y un botón</td></tr>
+            <tr><td class="num">60</td><td class="num">26</td><td class="num">~4750 px</td><td><b>~720 px</b> y un botón</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rules" style="margin-top:32px">
+        <div class="rule">
+          <h3>Se ven diez, el resto entra a pedido</h3>
+          <p>
+            La sección se queda en unas cuatro filas y abajo aparece
+            <em>«Ver las N restantes»</em>. Al tocarlo se despliegan en el mismo lugar, sin
+            recargar ni cambiar de página. Es un checkbox y dos reglas de CSS: cero
+            JavaScript, y anda igual con el JS desactivado.
+          </p>
+          <p>
+            El corte no cae en cualquier foto: cae al final de un bloque, que es lo que
+            garantiza que ni el estado plegado ni el desplegado queden con la última fila
+            dentada. Los huecos que hacen falta para cerrar cada uno de los dos estados los
+            calcula el script.
+          </p>
+        </div>
+
+        <div class="rule">
+          <h3>Y las de abajo ni siquiera se descargan</h3>
+          <p>
+            Esta es la parte que importa de verdad para el celular. Cada miniatura lleva
+            <code>loading="lazy"</code>, así que el navegador solo pide las que están cerca
+            de la pantalla; las que quedan detrás del botón no se bajan hasta que lo tocás.
+            Con treinta capturas, entrar a la página cuesta lo mismo que con diez.
+          </p>
+          <p>
+            La foto grande, aparte, no se descarga nunca hasta que alguien abre el visor.
+            Vive en <code>data-full</code>, que no es un atributo que el navegador precargue.
+          </p>
+        </div>
+
+        <div class="rule">
+          <h3>Si algún día son doscientas</h3>
+          <p>
+            Ahí sí conviene una página aparte, <code>galeria.html</code>, con la portada
+            mostrando una selección y un enlace. Pero eso es un problema de 2027: hasta unas
+            sesenta, el botón alcanza y sobra.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== LA AUTOMATIZACION ===================== -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Sí, se automatiza</p>
+        <h2>Tirás las capturas en una carpeta y corrés una cosa</h2>
+        <p>
+          <code>tools/galeria.py</code> hace las dos conversiones, te arma la ficha de cada
+          captura y reescribe el bloque de la galería en <code>index.html</code>. Es un solo
+          archivo de Python, sin instalar nada del ecosistema web: sigue sin haber build.
+        </p>
+      </div>
+
+      <div class="rules">
+        <div class="rule">
+          <h3>Tirás las capturas y lo corrés</h3>
+          <p>
+            Van tal como salen del juego, sin tocar nada, en
+            <code>img/galeria/originales/</code>.
+          </p>
+          <pre><code>python3 tools/galeria.py</code></pre>
+          <p style="margin-top:12px">
+            Convierte cada una a las dos versiones WebP y te agrega una línea por captura
+            nueva en <code>img/galeria/fotos.txt</code>, con los campos en blanco.
+          </p>
+        </div>
+
+        <div class="rule">
+          <h3>Completás la ficha</h3>
+          <p>
+            Un archivo de texto plano, un renglón por foto, separado por barras. Sin JSON,
+            sin comas ni comillas que se rompan si te comés una.
+          </p>
+          <pre><code># archivo | título | servidor | año | categorías | alt
+2023-puerto | El puerto de noche | Canitas Wipe | 2023 | bases | Muelles y
+    edificios iluminados sobre el agua, de noche</code></pre>
+          <p style="margin-top:12px">
+            El orden del archivo es el orden de la galería: para mover una foto, movés su
+            línea. Las líneas sin título se ignoran, así que una captura a medio documentar
+            nunca llega al sitio por accidente.
+          </p>
+        </div>
+
+        <div class="rule">
+          <h3>Lo volvés a correr</h3>
+          <p>
+            Ahora sí reescribe el bloque entre dos comentarios de
+            <code>index.html</code> y ya está publicable. Decide solo qué tamaño le toca a
+            cada foto, dónde va el corte del «ver más» y cuántos huecos cierran cada
+            estado — que es justamente la parte que da pereza hacer a mano y en la que es
+            fácil equivocarse.
+          </p>
+          <pre><code>15 capturas, 10 a la vista y 5 detrás del botón.</code></pre>
+        </div>
+
+        <div class="rule">
+          <h3>Correrlo de nuevo no rompe nada</h3>
+          <p>
+            Solo convierte lo que falta o lo que cambió, y si no hay nada que hacer te lo
+            dice y se va. Podés correrlo cada vez que tocás el archivo de texto sin esperar
+            un minuto de conversiones.
+          </p>
+          <p>
+            <code>--check</code> te dice qué haría sin escribir nada. Y si borrás un
+            original pero te olvidás de sacar su línea, avisa en vez de dejar una foto rota
+            en el sitio.
+          </p>
+        </div>
+
+        <div class="rule">
+          <h3>Lo único que hay que instalar</h3>
+          <p>
+            <code>cwebp</code>, que es lo que convierte a WebP. En Debian o Ubuntu,
+            <code>sudo apt install webp</code>; en Mac, <code>brew install webp</code>; en
+            Windows hay un zip oficial de Google. El script te lo dice con el enlace si no
+            lo encuentra, en vez de fallar con un error críptico.
+          </p>
+          <p>
+            Python ya lo tenés si usás Linux o Mac; en Windows es una descarga y listo.
+            Nada de npm, nada de <code>node_modules</code>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===================== EL MANEJO ===================== -->
   <section class="sec">
     <div class="wrap">
@@ -745,13 +985,9 @@ pre code{color:inherit; font-size:inherit}
             </table>
           </div>
           <p style="margin-top:12px">
-            Para convertir de una, con <code>cwebp</code> (viene en el paquete
-            <code>webp</code> de cualquier distro, y hay build para Windows):
+            De esto no te tenés que acordar: son los números que ya usa
+            <code>tools/galeria.py</code>.
           </p>
-          <pre><code>for f in *.png; do
-  cwebp -q 78 -resize 640 0  "$f" -o "${f%.*}-thumb.webp"
-  cwebp -q 80 -resize 1920 0 "$f" -o "${f%.*}.webp"
-done</code></pre>
         </div>
 
         <div class="rule">
@@ -778,12 +1014,13 @@ done</code></pre>
         </div>
 
         <div class="rule">
-          <h3>Cuándo dejar de escribir HTML a mano</h3>
+          <h3>El HTML no se escribe a mano</h3>
           <p>
-            Hasta unas treinta fotos, el bloque literal en <code>index.html</code> es lo más
-            simple y no rompe nada. Pasando de ahí, o si sube más de una persona, conviene
-            mover la lista a un <code>img/galeria/galeria.json</code> y que el JS la dibuje:
-            agregar una foto pasa a ser una línea. Antes de ese punto es complicarse por gusto.
+            Lo genera <code>tools/galeria.py</code> a partir del archivo de texto. Sigue
+            siendo HTML literal en <code>index.html</code> — no hay fetch, no hay JSON que
+            cargar, y si el JavaScript falla la galería igual se ve —, pero nadie tiene que
+            pegar treinta bloques de <code>&lt;figure&gt;</code> a mano ni acordarse de poner
+            el <code>width</code> correcto.
           </p>
         </div>
 
@@ -828,33 +1065,41 @@ done</code></pre>
             </tr>
             <tr>
               <td><b>index.html</b></td>
-              <td>Se reemplaza el contenido de <code>&lt;section id="galeria"&gt;</code></td>
+              <td>Se reemplaza el contenido de <code>&lt;section id="galeria"&gt;</code> por la cáscara y dos comentarios marcadores</td>
               <td class="num">~30 líneas</td>
             </tr>
             <tr>
+              <td><b>tools/galeria.py</b></td>
+              <td>Archivo nuevo. Ya está escrito y probado en esta rama</td>
+              <td class="num">~330 líneas</td>
+            </tr>
+            <tr>
               <td><b>README.md</b></td>
-              <td>Actualizar «Cómo agregar fotos a la galería» con el flujo de dos tamaños</td>
+              <td>Reemplazar «Cómo agregar fotos a la galería» por el flujo de tres pasos</td>
               <td class="num">~1 sección</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <p style="margin-top:26px">Y agregar una foto queda en pegar esto:</p>
-      <pre style="margin-top:12px"><code>&lt;figure class="gal-slot" data-cat="bases" data-size="wide"&gt;
-  &lt;img src="img/galeria/2023-canitas-base-nocturna-thumb.webp"
-       data-full="img/galeria/2023-canitas-base-nocturna.webp"
-       alt="Base de piedra con torre iluminada sobre un lago, de noche"
-       loading="lazy" width="1600" height="900" /&gt;
-  &lt;figcaption class="gal-tip"&gt;
-    &lt;b&gt;La base del lago&lt;/b&gt;&lt;span&gt;Canitas Wipe · 2023&lt;/span&gt;
-  &lt;/figcaption&gt;
-  &lt;button class="gal-open" type="button" aria-label="Ampliar: La base del lago"&gt;&lt;/button&gt;
-&lt;/figure&gt;</code></pre>
+      <p style="margin-top:26px">
+        Dentro de <code>index.html</code>, la sección queda así de corta: el script escribe
+        entre los dos marcadores y no toca nada más del archivo.
+      </p>
+      <pre style="margin-top:12px"><code>&lt;section id="galeria" class="section"&gt;
+  &lt;div class="container reveal gal"&gt;
+    &lt;h2&gt;Galería&lt;/h2&gt;
+    &lt;p&gt;Las bases, los wipes, los eventos y los desastres.&lt;/p&gt;
+
+    &lt;div class="gal-bar"&gt;…los filtros…&lt;/div&gt;
+
+    &lt;!-- GALERIA:INICIO (lo genera tools/galeria.py, no editar a mano) --&gt;
+    &lt;!-- GALERIA:FIN --&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre>
       <p class="dim" style="margin-top:14px; font-size:15px">
-        <code>data-size</code> acepta <code>wide</code>, <code>tall</code> y <code>big</code>.
-        Sin él, la foto ocupa un slot normal. Es lo único que hay que pensar, y se puede
-        cambiar después sin tocar nada más.
+        Si el bloque queda vacío porque todavía no hay capturas, se ve el cofre vacío del
+        demo. No hay que hacer nada especial para eso.
       </p>
     </div>
   </section>
@@ -864,9 +1109,15 @@ done</code></pre>
       <h2>El siguiente paso</h2>
       <p>
         Decime si te cierra el concepto y lo integro a <code>index.html</code>,
-        <code>onepage.css</code> y <code>onepage.js</code> — dejando la galería en estado vacío,
-        que es lo honesto hasta que haya capturas de verdad. Si preferís otra dirección,
-        también hay versión en cinta horizontal y versión en muro tipo polaroid.
+        <code>onepage.css</code> y <code>onepage.js</code> — dejando la galería en estado
+        vacío, que es lo honesto hasta que haya capturas de verdad. Ese mismo día podés
+        tirar las primeras en <code>img/galeria/originales/</code>, correr el script y ver
+        si el flujo te resulta cómodo antes de comprometerte con nada.
+      </p>
+      <p style="margin-top:14px">
+        Si preferís otra dirección visual, también hay versión en cinta horizontal y versión
+        en muro tipo polaroid. El script sirve igual para cualquiera de las tres: lo único
+        que cambia es la plantilla del <code>&lt;figure&gt;</code>.
       </p>
     </div>
   </section>
@@ -895,13 +1146,16 @@ done</code></pre>
   const box = document.getElementById('gal-box');
   if (!box) return;
 
-  const slots   = Array.from(document.querySelectorAll('.gal-grid--full .gal-slot'));
+  const todos   = Array.from(document.querySelectorAll('.gal-grid--full .gal-slot'));
   const boxImg  = document.getElementById('gal-box-img');
   const elTitle = document.getElementById('gal-box-title');
   const elMeta  = document.getElementById('gal-box-meta');
   const elCount = document.getElementById('gal-box-count');
   const quieto  = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+  // Las que están detrás del "ver más" no cuentan hasta que se despliegan:
+  // se recalcula al abrir, para que las flechas no salten a una foto oculta
+  let slots = todos;
   let i = 0;
 
   // Envuelve el cambio en una transición cuando el navegador la tiene.
@@ -924,7 +1178,9 @@ done</code></pre>
     i = n;
   };
 
-  const abrir = (n) => {
+  const abrir = (slot) => {
+    slots = todos.filter((s) => s.offsetParent !== null);
+    const n = slots.indexOf(slot);
     const origen = slots[n].querySelector('img');
     origen.style.viewTransitionName = 'gal-hero';
     const vt = conTransicion(() => {
@@ -950,8 +1206,8 @@ done</code></pre>
 
   const mover = (paso) => pintar((i + paso + slots.length) % slots.length);
 
-  slots.forEach((slot, n) => {
-    slot.querySelector('.gal-open')?.addEventListener('click', () => abrir(n));
+  todos.forEach((slot) => {
+    slot.querySelector('.gal-open')?.addEventListener('click', () => abrir(slot));
   });
 
   box.querySelector('.gal-close').addEventListener('click', cerrar);

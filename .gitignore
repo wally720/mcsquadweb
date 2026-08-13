@@ -54,3 +54,7 @@ Desktop.ini
 *.orig
 *.rej
 
+
+# Python
+__pycache__/
+*.pyc
