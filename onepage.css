@@ -308,9 +308,13 @@ img.avatar{
    Las esquinas vivas y el bisel hundido son deliberados: es la unica seccion
    que rompe con el redondeado del resto, y esa es su identidad.
    ========================================================================== */
-.gal{ --slot-row: clamp(112px, 13.5vw, 200px); }
+/* Cuatro filas de esto es el alto total de la galeria, pase lo que pase con
+   la cantidad de capturas. De ahi que sea mas baja que un mosaico vertical. */
+.gal{ --slot-row: clamp(108px, 11.5vw, 168px); }
 
-.gal-bar{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:18px 0 0}
+.gal-bars{display:grid; gap:10px; margin:18px 0 0}
+.gal-bar{display:flex; flex-wrap:wrap; align-items:center; gap:8px}
+.gal-bar-label{min-width:62px}
 .gal-bar-label{
   font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size:11px; letter-spacing:.16em; text-transform:uppercase;
@@ -340,6 +344,81 @@ img.avatar{
   grid-auto-flow:dense;
   gap:10px;
   margin-top:20px;
+}
+
+/* La tira: la galeria no crece hacia abajo, crece hacia el costado. La rejilla
+   se llena por columnas, asi que al filtrar el mosaico se rearma solo y la
+   seccion mide siempre lo mismo, con veinte capturas o con doscientas. */
+.gal-strip{position:relative; margin-top:20px}
+
+.gal-grid--full{
+  grid-template-columns:none;
+  grid-template-rows:repeat(4, var(--slot-row));
+  grid-auto-flow:column dense;
+  grid-auto-columns:calc((100% - 30px) / 4);
+  margin-top:0;
+  overflow-x:auto; overflow-y:hidden;
+  overscroll-behavior-x:contain;
+  scroll-snap-type:x proximity;
+  /* La sombra del slot se corta contra el borde del scroller si no hay aire */
+  padding:6px 6px 10px;
+  margin-inline:-6px;
+  scrollbar-width:none;
+}
+.gal-grid--full::-webkit-scrollbar{display:none}
+.gal-grid[hidden]{display:none}   /* display:grid le gana al [hidden] del navegador */
+.gal-grid--full .gal-slot{scroll-snap-align:start}
+@media (prefers-reduced-motion: no-preference){
+  .gal-grid--full{scroll-behavior:smooth}
+}
+
+/* Los mandos de pagina. Ocultos hasta que el JS sabe cuantas paginas hay. */
+.gal-turns{display:flex; align-items:center; justify-content:center; gap:14px; margin-top:14px}
+.gal-turns[hidden]{display:none}
+.gal-turn{
+  width:42px; height:42px; flex:none; cursor:pointer;
+  border-radius:999px; border:1px solid rgba(255,255,255,.3);
+  background:rgba(0,0,0,.34); color:#fff;
+  display:grid; place-items:center;
+  transition: background-color .18s ease, border-color .18s ease, opacity .18s ease;
+}
+.gal-turn:hover:not(:disabled){background:rgba(0,0,0,.6); border-color:rgba(255,255,255,.5)}
+.gal-turn:disabled{opacity:.28; cursor:default}
+.gal-turn:focus-visible{outline:3px solid #00e0ff; outline-offset:3px}
+.gal-turn::before{
+  content:''; width:10px; height:10px;
+  border-top:2px solid currentColor; border-right:2px solid currentColor;
+}
+.gal-turn--prev::before{transform:translateX(2px) rotate(-135deg)}
+.gal-turn--next::before{transform:translateX(-2px) rotate(45deg)}
+
+.gal-dots{display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px}
+.gal-dot{
+  width:10px; height:10px; padding:0; cursor:pointer;
+  border-radius:999px; border:1px solid rgba(255,255,255,.34);
+  background:transparent;
+  transition: background-color .18s ease, border-color .18s ease, transform .18s ease;
+}
+.gal-dot:hover{background:rgba(255,255,255,.34)}
+.gal-dot[aria-selected="true"]{background:#FCA5A5; border-color:#FCA5A5; transform:scale(1.25)}
+.gal-dot:focus-visible{outline:3px solid #00e0ff; outline-offset:3px}
+
+/* Cuando el filtro no deja nada en pie */
+.gal-nada{
+  margin:0; padding:34px 0; text-align:center;
+  font-size:15px; color:rgba(255,255,255,.7);
+}
+.gal-nada[hidden]{display:none}
+
+/* En el celular una pagina de mosaico no entra: pasa a ser una tira continua
+   de dos filas, que se arrastra con el dedo sin enganches. */
+@media (max-width:760px){
+  .gal-grid--full{
+    grid-template-rows:repeat(2, var(--slot-row));
+    grid-auto-columns:calc((100% - 10px) / 2);
+    scroll-snap-type:none;
+  }
+  .gal-turns{display:none}
 }
 
 /* El slot: bisel hundido de inventario. Sin imagenes, solo box-shadow. */
@@ -412,32 +491,9 @@ img.avatar{
   .gal-tip span{font-size:9.5px; letter-spacing:.07em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 }
 
-/* Filtrado: en vez de esconder, que descuadraria el mosaico, se apaga */
-.gal:has(#galf-bases:checked)     .gal-slot[data-cat]:not([data-cat~="bases"]),
-.gal:has(#galf-eventos:checked)   .gal-slot[data-cat]:not([data-cat~="eventos"]),
-.gal:has(#galf-rol:checked)       .gal-slot[data-cat]:not([data-cat~="rol"]),
-.gal:has(#galf-desastres:checked) .gal-slot[data-cat]:not([data-cat~="desastres"]){
-  opacity:.16; filter:grayscale(1); transform:scale(.97); pointer-events:none;
-}
-
-/* "Ver mas": la seccion no crece sin limite. Con treinta capturas la rejilla
-   pasa de 2000px; asi se queda en cuatro filas y el resto entra a pedido.
-   El corte cae al final de un bloque, de ahi los dos juegos de huecos. */
-.gal-mas-check{position:absolute; opacity:0; width:1px; height:1px}
-.gal-mas{
-  display:inline-flex; align-items:center; gap:9px; cursor:pointer;
-  margin-top:16px; padding:13px 22px; border-radius:999px;
-  font-size:15px; font-weight:700; color:#fff;
-  border:1px solid rgba(255,255,255,.3); background:rgba(0,0,0,.34);
-  transition: background-color .18s ease, border-color .18s ease;
-}
-.gal-mas:hover{background:rgba(0,0,0,.55); border-color:rgba(255,255,255,.5)}
-.gal-mas span{font-size:12px; opacity:.8}
-.gal-mas-check:focus-visible + .gal-mas{outline:3px solid #00e0ff; outline-offset:3px}
-.gal:not(:has(.gal-mas-check:checked)) .gal-slot--extra,
-.gal:not(:has(.gal-mas-check:checked)) .gal-hole--fin{display:none}
-.gal:has(.gal-mas-check:checked) .gal-hole--corte,
-.gal:has(.gal-mas-check:checked) .gal-mas{display:none}
+/* Filtrado: se esconde de verdad. Antes se atenuaba para no descuadrar el
+   mosaico vertical; ahora la rejilla fluye por columnas y se rearma sola. */
+.gal-slot.is-off{display:none}
 
 /* Estado vacio: los huecos tambien son diseno */
 .gal-hole{

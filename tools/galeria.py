@@ -45,31 +45,19 @@ FIN = "<!-- GALERIA:FIN -->"
 ANCHO_MINI, CALIDAD_MINI = 640, 78
 ANCHO_FULL, CALIDAD_FULL = 1920, 80
 
-# Cuántas capturas se ven antes del botón "ver más". El corte real cae en el
-# final de un bloque, así que el número exacto puede quedar un poco por encima.
-VISIBLES = 10
-
-# La rejilla tiene 4 columnas y todo se mide en unidades de 1 columna x 1 fila.
+# La rejilla se lee por columnas y todo se mide en unidades de 1 columna x
+# 1 fila. La galería no crece hacia abajo: crece hacia el costado.
 UNIDADES = {"norm": 1, "wide": 2, "tall": 2, "big": 4}
 COLUMNAS = 4
 
 # Con menos de esto no vale la pena la barra de filtros: se filtra con la vista.
 MINIMO_PARA_FILTRAR = 6
 
-# El orden manda en la barra. Solo salen las que tienen fotos.
-CATEGORIAS = [
-    ("bases", "Bases"),
-    ("eventos", "Eventos"),
-    ("rol", "Rol"),
-    ("desastres", "Desastres"),
-]
-
 # Cuántos slots vacíos tiene el cofre cuando todavía no hay ninguna captura.
 HUECOS_VACIA = 8
 
-# Cada bloque suma 8 unidades, o sea 2 filas exactas de 4 columnas. Por eso el
-# mosaico tesela sin agujeros por dentro, y por eso el corte del "ver más"
-# tiene que caer entre bloques y no en cualquier foto.
+# Cada bloque suma 8 unidades, o sea 2 columnas exactas de 4 filas. Por eso el
+# mosaico tesela sin agujeros por dentro mientras no se filtre nada.
 BLOQUES = [
     ("big", "norm", "norm", "wide"),
     ("tall", "norm", "norm", "norm", "norm", "wide"),
@@ -157,25 +145,10 @@ def asignar_tamanos(cuantas):
     return tamanos
 
 
-def punto_de_corte(tamanos):
-    """Dónde va el 'ver más': el último final de bloque que no pase de VISIBLES.
-    Devuelve None si no hay tantas fotos como para que valga la pena cortar."""
-    if len(tamanos) <= VISIBLES + 2:
-        return None
-    corte, i = 0, 0
-    while True:
-        bloque = BLOQUES[i % len(BLOQUES)]
-        if corte + len(bloque) > VISIBLES or corte + len(bloque) >= len(tamanos):
-            break
-        corte += len(bloque)
-        i += 1
-    return corte or None
-
-
-def huecos_para_cerrar(tamanos):
-    """Cuántos slots vacíos hacen falta para que la última fila quede pareja."""
-    unidades = sum(UNIDADES[t] for t in tamanos)
-    return (-unidades) % COLUMNAS
+def clave(texto):
+    """Un token de categoría convertido en algo que sirva de id de HTML."""
+    limpio = "".join(c if c.isalnum() else "-" for c in texto.lower())
+    return limpio.strip("-") or "x"
 
 
 # ------------------------------------------------------------------- lista
@@ -186,8 +159,9 @@ CABECERA = (
     "#   archivo | título | servidor | año | categorías | alt\n"
     "#\n"
     "# archivo      nombre del original sin extensión, tal como está en originales/\n"
-    "# categorías   bases, eventos, rol o desastres. Se puede poner más de una,\n"
-    "#              separadas por espacio.\n"
+    "# categorías   el id interno del servidor (MildcraftV2, PokecraftV2...).\n"
+    "#              De acá salen los chips de filtro, tal cual los escribas.\n"
+    "#              Se puede poner más de uno, separados por espacio.\n"
     "# alt          qué se ve en la captura, para quien no la puede ver.\n"
     "#              Describe la escena, no el archivo.\n"
     "#\n"
@@ -221,7 +195,7 @@ def escribir_lista(ruta, entradas, nuevas):
 
 # -------------------------------------------------------------------- html
 
-def figura(e, tamano, extra, indent):
+def figura(e, tamano, indent):
     src = f"{SALIDA}/{e['archivo']}-thumb.webp"
     full = f"{SALIDA}/{e['archivo']}.webp"
     try:
@@ -230,11 +204,11 @@ def figura(e, tamano, extra, indent):
         w, h = 640, 360
     titulo = html.escape(e["titulo"])
     meta = " · ".join(x for x in (e["servidor"], e["anio"]) if x)
-    clase = "gal-slot gal-slot--extra" if extra else "gal-slot"
     talla = f' data-size="{tamano}"' if tamano != "norm" else ""
+    anio = f' data-anio="{html.escape(e["anio"])}"' if e["anio"] else ""
     i = " " * indent
     return (
-        f'{i}<figure class="{clase}" data-cat="{html.escape(e["categorias"])}"{talla}>\n'
+        f'{i}<figure class="gal-slot" data-cat="{html.escape(e["categorias"])}"{anio}{talla}>\n'
         f'{i}  <img src="{src}" data-full="{full}"\n'
         f'{i}       alt="{html.escape(e["alt"])}"\n'
         f'{i}       loading="lazy" width="{w}" height="{h}" />\n'
@@ -244,27 +218,60 @@ def figura(e, tamano, extra, indent):
     )
 
 
+def servidores_presentes(entradas):
+    """Los servidores salen del campo 'categorías', que es donde vive el id
+    interno de cada servidor. Se listan en el orden en que aparecen."""
+    vistos = []
+    for e in entradas:
+        for token in e["categorias"].split():
+            if token not in vistos:
+                vistos.append(token)
+    return vistos
+
+
+def anios_presentes(entradas):
+    """Los años, del más nuevo al más viejo."""
+    return sorted({e["anio"] for e in entradas if e["anio"]}, reverse=True)
+
+
+def grupo_filtros(nombre, etiqueta, valores, indent):
+    """Un grupo de chips. Los valores son los que van al data- de la figura;
+    'todo' es el que viene marcado."""
+    i = " " * indent
+    chips = [f'{i}    <input type="radio" name="{nombre}" id="{nombre}-todo" '
+             f'value="" checked /><label for="{nombre}-todo">Todo</label>\n']
+    for v in valores:
+        vid = f"{nombre}-{clave(v)}"
+        chips.append(f'{i}    <input type="radio" name="{nombre}" id="{vid}" '
+                     f'value="{html.escape(v, quote=True)}" />'
+                     f'<label for="{vid}">{html.escape(v)}</label>\n')
+    return (
+        f'{i}  <div class="gal-bar">\n'
+        f'{i}    <span class="gal-bar-label">{etiqueta}</span>\n'
+        f'{i}    <fieldset class="gal-filters">\n'
+        f'{i}      <legend class="sr-only">Filtrar capturas por {etiqueta.lower()}</legend>\n'
+        + "".join(f"  {c}" for c in chips) +
+        f'{i}    </fieldset>\n'
+        f'{i}  </div>\n'
+    )
+
+
 def barra_filtros(entradas, indent):
-    """La barra solo sale si hay bastantes fotos y más de una categoría."""
-    presentes = {c for e in entradas for c in e["categorias"].split()}
-    usadas = [(k, etiqueta) for k, etiqueta in CATEGORIAS if k in presentes]
-    if len(entradas) < MINIMO_PARA_FILTRAR or len(usadas) < 2:
+    """Dos grupos de chips, año y servidor, sacados de lo que hay en la lista.
+    Cada grupo sale por su cuenta: con un solo año no hay nada que elegir."""
+    if len(entradas) < MINIMO_PARA_FILTRAR:
+        return ""
+    anios = anios_presentes(entradas)
+    servidores = servidores_presentes(entradas)
+    grupos = ""
+    if len(anios) > 1:
+        grupos += grupo_filtros("galf-anio", "Año", anios, indent)
+    if len(servidores) > 1:
+        grupos += grupo_filtros("galf-serv", "Servidor", servidores, indent)
+    if not grupos:
         return ""
     i = " " * indent
-    chips = [f'{i}    <input type="radio" name="galf" id="galf-todo" checked />'
-             f'<label for="galf-todo">Todo</label>\n']
-    for k, etiqueta in usadas:
-        chips.append(f'{i}    <input type="radio" name="galf" id="galf-{k}" />'
-                     f'<label for="galf-{k}">{etiqueta}</label>\n')
-    return (
-        f'{i}<div class="gal-bar">\n'
-        f'{i}  <span class="gal-bar-label">Filtrar</span>\n'
-        f'{i}  <fieldset class="gal-filters">\n'
-        f'{i}    <legend class="sr-only">Filtrar capturas por tipo</legend>\n'
-        + "".join(chips) +
-        f'{i}  </fieldset>\n'
-        f'{i}</div>\n\n'
-    )
+    return f'{i}<div class="gal-bars">\n{grupos}{i}</div>\n\n'
 
 
 def cofre_vacio(indent):
@@ -291,37 +298,41 @@ def cofre_vacio(indent):
 
 
 def construir_html(entradas, indent=12):
-    """Devuelve la rejilla entera: filtros, figuras, huecos y botón.
-    Sin entradas devuelve el cofre vacío, que es un estado válido del sitio."""
+    """Devuelve la galería entera: filtros y la tira de capturas.
+    Sin entradas devuelve el cofre vacío, que es un estado válido del sitio.
+
+    Las capturas van de la más nueva a la más vieja, al revés de fotos.txt,
+    que se lee de arriba hacia abajo como un diario."""
     if not entradas:
-        return cofre_vacio(indent), None
+        return cofre_vacio(indent), 0
 
+    entradas = list(reversed(entradas))
     tamanos = asignar_tamanos(len(entradas))
-    corte = punto_de_corte(tamanos)
     i = " " * indent
-    salida = [barra_filtros(entradas, indent), f'{i}<div class="gal-grid gal-grid--full">\n']
+    salida = [
+        barra_filtros(entradas, indent),
+        f'{i}<div class="gal-strip">\n'
+        f'{i}  <div class="gal-grid gal-grid--full" role="group" '
+        f'aria-label="Capturas de la comunidad">\n'
+    ]
 
-    for n, (e, t) in enumerate(zip(entradas, tamanos)):
-        salida.append(figura(e, t, extra=corte is not None and n >= corte, indent=indent + 2))
+    for e, t in zip(entradas, tamanos):
+        salida.append(figura(e, t, indent=indent + 4))
 
-    # Huecos que cierran la última fila. Hacen falta dos juegos: con el botón
-    # plegado la rejilla termina en otro punto que con todo desplegado.
-    if corte is not None:
-        for _ in range(huecos_para_cerrar(tamanos[:corte])):
-            salida.append(f'{i}  <div class="gal-hole gal-hole--corte"></div>\n')
-    for _ in range(huecos_para_cerrar(tamanos)):
-        salida.append(f'{i}  <div class="gal-hole gal-hole--fin"></div>\n')
-
-    salida.append(f'{i}</div>\n')
-
-    if corte is not None:
-        restantes = len(entradas) - corte
-        salida.append(
-            f'\n{i}<input type="checkbox" id="gal-mas" class="gal-mas-check" />\n'
-            f'{i}<label class="gal-mas" for="gal-mas">'
-            f'Ver las {restantes} restantes<span aria-hidden="true">▾</span></label>\n'
-        )
-    return "".join(salida), corte
+    salida.append(
+        f'{i}  </div>\n'
+        f'{i}  <p class="gal-nada" hidden>No hay capturas con ese filtro. '
+        f'Prueba con otro año o servidor.</p>\n'
+        f'{i}  <div class="gal-turns" hidden>\n'
+        f'{i}    <button class="gal-turn gal-turn--prev" type="button" '
+        f'aria-label="Capturas anteriores"></button>\n'
+        f'{i}    <div class="gal-dots" role="tablist" aria-label="Páginas de la galería"></div>\n'
+        f'{i}    <button class="gal-turn gal-turn--next" type="button" '
+        f'aria-label="Capturas siguientes"></button>\n'
+        f'{i}  </div>\n'
+        f'{i}</div>\n'
+    )
+    return "".join(salida), len(entradas)
 
 
 def splicear(ruta, bloque, check):
@@ -421,15 +432,23 @@ def main():
 
     # 4. Reescribir el HTML, solo con las que están completas y convertidas.
     #    Publicar una cuya conversión falló dejaría un hueco roto en la galería.
-    listas = [e for e in entradas if e["titulo"] and e["archivo"] in stems
-              and (args.check or os.path.exists(os.path.join(RAIZ, SALIDA, f"{e['archivo']}-thumb.webp")))]
+    #    Manda el WebP, no el original: los originales están fuera del repo, así
+    #    que exigirlos borraba la galería entera en cualquier clon limpio.
+    def publicable(e):
+        if not e["titulo"]:
+            return False
+        if os.path.exists(os.path.join(RAIZ, SALIDA, f"{e['archivo']}-thumb.webp")):
+            return True
+        return args.check and e["archivo"] in stems
+
+    listas = [e for e in entradas if publicable(e)]
     incompletas = len([e for e in entradas if not e["titulo"]])
     if incompletas:
         print(f"{incompletas} línea(s) sin título: esas no salen al sitio todavía.")
 
     # Sin capturas completas se publica el cofre vacío, que es un estado
     # legítimo de la sección: mejor eso que dejar lo de la corrida anterior.
-    bloque, corte = construir_html(listas)
+    bloque, publicadas = construir_html(listas)
     if not splicear(destino, bloque, args.check):
         print(f"{args.destino} ya estaba al día.")
         return 0
@@ -439,9 +458,10 @@ def main():
         print(f"{verbo} {args.destino}: sin capturas, queda el cofre vacío.")
         return 0
 
-    visibles = corte if corte is not None else len(listas)
-    detalle = f" y {len(listas) - visibles} detrás del botón." if corte is not None else "."
-    print(f"{verbo} {args.destino}: {len(listas)} capturas, {visibles} a la vista{detalle}")
+    anios = len(anios_presentes(listas))
+    servidores = len(servidores_presentes(listas))
+    print(f"{verbo} {args.destino}: {publicadas} capturas, "
+          f"{anios} año(s) y {servidores} servidor(es) en los filtros.")
     return 0
 
 

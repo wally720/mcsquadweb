@@ -206,3 +206,90 @@ document.querySelectorAll('a[href="#top"]').forEach((link) => {
     x0 = null;
   }, { passive: true });
 })();
+
+// Filtros de la galería (año y servidor) y paginado horizontal.
+// Los dos filtros se combinan: año Y servidor, no uno u otro. Esconder de
+// verdad las que no pasan es lo que deja que la rejilla se rearme sola, y de
+// paso el visor las saltea, porque descarta las que no están en pantalla.
+(() => {
+  const gal = document.querySelector('.gal');
+  const grid = gal && gal.querySelector('.gal-grid--full');
+  if (!grid) return;
+
+  const slots = Array.from(grid.querySelectorAll('.gal-slot'));
+  const nada = gal.querySelector('.gal-nada');
+  const mandos = gal.querySelector('.gal-turns');
+  const antes = gal.querySelector('.gal-turn--prev');
+  const luego = gal.querySelector('.gal-turn--next');
+  const puntos = gal.querySelector('.gal-dots');
+
+  const elegido = (grupo) =>
+    gal.querySelector(`input[name="${grupo}"]:checked`)?.value || '';
+
+  // Cuál de los puntos queda encendido, y si las flechas llegaron al borde.
+  // El margen de 8px es para que el redondeo del scroll no deje una flecha
+  // viva sin nada adonde ir.
+  const marcar = () => {
+    const paso = grid.clientWidth;
+    if (!paso || !puntos.children.length) return;
+    const n = Math.min(puntos.children.length - 1, Math.round(grid.scrollLeft / paso));
+    Array.from(puntos.children).forEach((p, k) =>
+      p.setAttribute('aria-selected', String(k === n)));
+    antes.disabled = grid.scrollLeft < 8;
+    luego.disabled = grid.scrollLeft + paso >= grid.scrollWidth - 8;
+  };
+
+  // Las páginas no están en el HTML: son cuántas veces entra el ancho visible
+  // en el ancho total. Por eso sobreviven a un filtro sin rearmar nada.
+  const paginar = () => {
+    const paso = grid.clientWidth;
+    const total = paso > 0 ? Math.max(1, Math.ceil(grid.scrollWidth / paso)) : 1;
+    mandos.hidden = grid.hidden || total < 2;
+    if (mandos.hidden) {
+      puntos.replaceChildren();
+      return;
+    }
+    if (puntos.children.length !== total) {
+      puntos.replaceChildren(...Array.from({ length: total }, (_, n) => {
+        const p = document.createElement('button');
+        p.type = 'button';
+        p.className = 'gal-dot';
+        p.setAttribute('role', 'tab');
+        p.setAttribute('aria-label', `Página ${n + 1} de ${total}`);
+        p.addEventListener('click', () => grid.scrollTo({ left: n * grid.clientWidth }));
+        return p;
+      }));
+    }
+    marcar();
+  };
+
+  const filtrar = () => {
+    const anio = elegido('galf-anio');
+    const serv = elegido('galf-serv');
+    let quedan = 0;
+    slots.forEach((s) => {
+      const suyos = (s.dataset.cat || '').split(/\s+/);
+      const pasa = (!anio || s.dataset.anio === anio) && (!serv || suyos.includes(serv));
+      s.classList.toggle('is-off', !pasa);
+      if (pasa) quedan += 1;
+    });
+    grid.hidden = quedan === 0;
+    if (nada) nada.hidden = quedan > 0;
+    // Cambiar de filtro devuelve al principio: quedarse en la página 4 de una
+    // tira que ahora tiene dos es quedarse mirando el vacío.
+    grid.scrollTo({ left: 0, behavior: 'auto' });
+    paginar();
+  };
+
+  antes.addEventListener('click', () => grid.scrollBy({ left: -grid.clientWidth }));
+  luego.addEventListener('click', () => grid.scrollBy({ left: grid.clientWidth }));
+  gal.querySelectorAll('.gal-filters input').forEach((f) =>
+    f.addEventListener('change', filtrar));
+
+  // Sin throttle a proposito: marcar() son tres lecturas y un atributo, y el
+  // navegador ya emite scroll a lo sumo una vez por cuadro.
+  grid.addEventListener('scroll', marcar, { passive: true });
+
+  new ResizeObserver(paginar).observe(grid);
+  filtrar();
+})();
