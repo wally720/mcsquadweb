@@ -102,14 +102,16 @@ if (floatBtn && hero) {
   floatBtn.classList.add('is-visible');
 }
 
-// Botón "Volver arriba"
-const backToTop = document.querySelector('.back-to-top');
-if (backToTop) {
-  backToTop.addEventListener('click', (e) => {
+// Volver arriba: el logo y el enlace del pie.
+// #top vive en el header, que es position:fixed, asi que el salto nativo del
+// navegador no mueve nada (un elemento fijo ya esta "a la vista"). Se lleva a
+// mano al inicio del documento.
+document.querySelectorAll('a[href="#top"]').forEach((link) => {
+  link.addEventListener('click', (e) => {
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
-}
+});
 
 // Visor de la galería: <dialog> nativo mas View Transitions donde las haya.
 // Si la galería todavía no tiene capturas, no engancha nada y se va.
